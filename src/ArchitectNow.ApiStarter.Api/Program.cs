@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace ArchitectNow.ApiStarter.Api
 {
@@ -11,14 +9,25 @@ namespace ArchitectNow.ApiStarter.Api
     {
         public static void Main(string[] args)
         {
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+            BuildWebHost(args)
+                .Run();
+        }
+
+        private static IWebHost BuildWebHost(string[] args)
+        {
+            var configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
+
+            return WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .Build();
+        }
 
-            host.Run();
+        private static void ConfigureLogger(WebHostBuilderContext ctx, ILoggingBuilder logging)
+        {
+            logging.AddConfiguration(ctx.Configuration.GetSection("Logging"));
+            logging.AddConsole();
+            logging.AddDebug();
         }
     }
 }
