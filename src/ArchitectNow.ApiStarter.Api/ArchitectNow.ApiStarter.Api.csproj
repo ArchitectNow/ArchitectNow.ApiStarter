@@ -3,8 +3,6 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Mappings" />
-    <Folder Include="ViewModels" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>

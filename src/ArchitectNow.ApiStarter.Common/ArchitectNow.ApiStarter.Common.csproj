@@ -3,9 +3,6 @@
     <TargetFramework>netstandard1.4</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Models" />
-    <Folder Include="Repositories" />
-    <Folder Include="Services" />
     <Folder Include="Utilities" />
   </ItemGroup>
 </Project>
