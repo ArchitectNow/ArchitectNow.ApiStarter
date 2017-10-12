@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectNow.ApiStarter.Api
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectNow.ApiStarter.Common", "ArchitectNow.ApiStarter.Common\ArchitectNow.ApiStarter.Common.csproj", "{45D334AE-625B-4BD4-B85B-FA26B8A1E8CF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArchitectNow.ApiStarter.Tests", "ArchitectNow.ApiStarter.Tests\ArchitectNow.ApiStarter.Tests.csproj", "{AE3A772B-99C1-47B8-B025-51F1EE5EEE63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{45D334AE-625B-4BD4-B85B-FA26B8A1E8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45D334AE-625B-4BD4-B85B-FA26B8A1E8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45D334AE-625B-4BD4-B85B-FA26B8A1E8CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE3A772B-99C1-47B8-B025-51F1EE5EEE63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE3A772B-99C1-47B8-B025-51F1EE5EEE63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE3A772B-99C1-47B8-B025-51F1EE5EEE63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE3A772B-99C1-47B8-B025-51F1EE5EEE63}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
