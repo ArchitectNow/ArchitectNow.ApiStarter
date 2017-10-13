@@ -5,4 +5,7 @@
   <ItemGroup>
     <Folder Include="Utilities" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.1" />
+  </ItemGroup>
 </Project>

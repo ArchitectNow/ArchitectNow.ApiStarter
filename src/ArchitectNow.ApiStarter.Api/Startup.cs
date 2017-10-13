@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ArchitectNow.ApiStarter.Common;
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -27,7 +29,20 @@ namespace ArchitectNow.ApiStarter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             _logger.LogInformation("Starting: Configure Services");
+            
+            
+            
             _logger.LogInformation("Completing: Configure Services");
+        }
+        
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            _logger.LogInformation("Starting: Configure Container");
+
+            builder.RegisterModule<CommonModule>();
+            builder.RegisterModule<ApiModule>();
+            
+            _logger.LogInformation("Completing: Configure Container");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using Autofac.Extensions.DependencyInjection;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
@@ -19,6 +20,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)
+                .ConfigureServices(collection => collection.AddAutofac())
                 .UseStartup<Startup>()
                 .Build();
         }
