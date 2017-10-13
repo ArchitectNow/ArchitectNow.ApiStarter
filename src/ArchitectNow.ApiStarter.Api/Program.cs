@@ -1,17 +1,49 @@
-﻿using Autofac.Extensions.DependencyInjection;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
 
 namespace ArchitectNow.ApiStarter.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
-            BuildWebHost(args)
-                .Run();
+            var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var logPath = Path.Combine(baseDir, "logs");
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo
+                .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
+                .WriteTo.ColoredConsole()
+                .CreateLogger();
+            try
+            {
+                BuildWebHost(args)
+                    .Run();
+                return 0;
+            }
+            catch (Exception exception)
+            {
+                Log.Fatal(exception, "Site terminated");
+                return 1;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         private static IWebHost BuildWebHost(string[] args)
@@ -22,14 +54,8 @@ namespace ArchitectNow.ApiStarter.Api
                 .UseConfiguration(configuration)
                 .ConfigureServices(collection => collection.AddAutofac())
                 .UseStartup<Startup>()
+                .UseSerilog(Log.Logger)
                 .Build();
-        }
-
-        private static void ConfigureLogger(WebHostBuilderContext ctx, ILoggingBuilder logging)
-        {
-            logging.AddConfiguration(ctx.Configuration.GetSection("Logging"));
-            logging.AddConsole();
-            logging.AddDebug();
         }
     }
 }
