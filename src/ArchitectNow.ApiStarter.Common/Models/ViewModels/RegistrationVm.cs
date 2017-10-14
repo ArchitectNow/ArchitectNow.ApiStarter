@@ -1,22 +1,24 @@
-﻿using ArchitectNow.ApiStarter.Common.MongoDb;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ArchitectNow.ApiStarter.Common.Models
+namespace ArchitectNow.ApiStarter.Common.Models.ViewModels
 {
-    public class User : BaseDocument
+    public class RegistrationVm
     {
-        public User()
+        public RegistrationVm()
         {
             
         }
         
+        [Required]
         public string Email { get; set; }
         
+        [Required]
         public string Password { get; set; }
         
+        [Required]
         public string NameFirst { get; set; }
         
+        [Required]
         public string NameLast { get; set; }
-        
-        
     }
 }

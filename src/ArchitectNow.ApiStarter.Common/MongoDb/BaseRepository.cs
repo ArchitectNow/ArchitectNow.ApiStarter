@@ -280,5 +280,10 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         {
             return await GetCollection().Find(filter).ToListAsync();
         }
+        
+        protected async Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> filter)
+        {
+            return await GetCollection().Find(filter).FirstOrDefaultAsync();
+        }
     }
 }

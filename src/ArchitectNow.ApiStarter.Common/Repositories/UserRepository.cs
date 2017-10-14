@@ -33,5 +33,24 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
                 Builders<User>.IndexKeys.Ascending(l => l.Email),
                 new CreateIndexOptions {Name = "user_email"});
         }
+
+        public async Task<User> GetByEmail(string Email)
+        {
+            Email = Email.Trim().ToLower();
+
+            return await FindOneAsync(x => x.Email == Email);
+        }
+
+        public async Task<User> VerifyCredentials(string Email, string Password)
+        {
+            var user = await GetByEmail(Email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return user.Password == Password ? user : null;
+        }
     }
 }

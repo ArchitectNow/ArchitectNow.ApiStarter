@@ -17,6 +17,12 @@ namespace ArchitectNow.ApiStarter.Common
             
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<MongoOptions>("mongo"))
                 .AsSelf().SingleInstance();
+            
+            builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<JwtIssuerOptions>("jwtIssuerOptions"))
+                .AsSelf().SingleInstance();
+            
+            builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<EnvironmentOptions>("environment"))
+                .AsSelf().SingleInstance();
         }
     }
 }
