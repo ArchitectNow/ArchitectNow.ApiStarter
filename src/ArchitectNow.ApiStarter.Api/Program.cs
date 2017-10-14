@@ -48,7 +48,12 @@ namespace ArchitectNow.ApiStarter.Api
 
         private static IWebHost BuildWebHost(string[] args)
         {
-            var configuration = new ConfigurationBuilder().AddCommandLine(args).Build();
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true, true)
+                .AddEnvironmentVariables()
+                .AddCommandLine(args);
+
+            var configuration = builder.Build();
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)

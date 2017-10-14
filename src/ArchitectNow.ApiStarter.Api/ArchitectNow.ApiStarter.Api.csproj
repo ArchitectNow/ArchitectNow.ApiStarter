@@ -10,6 +10,8 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="FluentValidation" Version="7.2.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="7.2.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.0" />
@@ -33,5 +35,13 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchitectNow.ApiStarter.Common\ArchitectNow.ApiStarter.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Web\Services\ExceptionResultBuilder.cs">
+      <Link>Services/ExceptionResultBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Web\Services\IExceptionResultBuilder.cs">
+      <Link>Services/IExceptionResultBuilder.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>

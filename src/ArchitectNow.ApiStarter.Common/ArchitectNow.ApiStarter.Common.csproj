@@ -15,4 +15,21 @@
       <HintPath>..\..\..\..\.nuget\packages\microsoft.extensions.options\1.1.2\lib\netstandard1.0\Microsoft.Extensions.Options.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Models\Exceptions\ApiException.cs">
+      <Link>Models/Exceptions/ApiException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Models\Exceptions\IApiException.cs">
+      <Link>Models/Exceptions/IApiException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Models\Exceptions\NotFoundException.cs">
+      <Link>Models/Exceptions/NotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Models\Exceptions\ValidationException.cs">
+      <Link>Models/Exceptions/ValidationException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Models\Validation\ValidationError.cs">
+      <Link>Models/Validation/ValidationError.cs</Link>
+    </Compile>
+  </ItemGroup>
 </Project>
