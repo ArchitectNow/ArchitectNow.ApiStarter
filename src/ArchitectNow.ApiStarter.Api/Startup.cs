@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Api.Filters;
 using ArchitectNow.ApiStarter.Common;
-using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -20,6 +20,7 @@ using Microsoft.Extensions.DependencyModel;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using Module = Autofac.Module;
 
 namespace ArchitectNow.ApiStarter.Api
 {
@@ -64,7 +65,11 @@ namespace ArchitectNow.ApiStarter.Api
         {
             _logger.LogInformation("Starting: Configure");
             
+            app.ConfigureSwagger(Assembly.GetExecutingAssembly());
             
+            app.ConfigureCompression();
+
+            app.UseMvc();
             
             app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
             

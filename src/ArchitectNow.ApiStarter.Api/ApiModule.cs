@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using ArchitectNow.ApiStarter.Api.Filters;
+using Autofac;
 using Microsoft.AspNetCore.Http;
 
 namespace ArchitectNow.ApiStarter.Api
@@ -9,6 +10,8 @@ namespace ArchitectNow.ApiStarter.Api
         {
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces();
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
+            builder.RegisterType<GlobalExceptionFilter>().AsSelf().InstancePerLifetimeScope();
+
         }
     }
 }
