@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using Microsoft.Extensions.DependencyModel;
 
 namespace ArchitectNow.ApiStarter.Api
 {
@@ -29,8 +31,8 @@ namespace ArchitectNow.ApiStarter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             _logger.LogInformation("Starting: Configure Services");
-            
-            
+
+            services.AddAutoMapper(config => { }, DependencyContext.Default);
             
             _logger.LogInformation("Completing: Configure Services");
         }
