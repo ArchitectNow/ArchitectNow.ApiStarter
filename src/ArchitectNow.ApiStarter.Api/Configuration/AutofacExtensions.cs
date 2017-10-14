@@ -8,10 +8,10 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 {
     public static class AutofacExtensions
     {
-        public static IContainer CreateAutofacContainer(this IServiceCollection services, IConfiguration configuration, Action<ContainerBuilder> additionalAction, params Module[] modules)
+        public static IContainer ConfigureAutofacContainer(this IServiceCollection services, IConfiguration configuration, Action<ContainerBuilder> additionalAction, params Module[] modules)
         {
             var builder = new ContainerBuilder();
-
+            
             builder.Register(ctx => configuration).As<IConfiguration>();
 
             foreach (var module in modules)
@@ -22,7 +22,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             additionalAction?.Invoke(builder);
 
             builder.Populate(services);
-			
+
             return builder.Build();
         }
     }

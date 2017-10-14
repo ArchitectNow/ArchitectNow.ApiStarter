@@ -11,7 +11,6 @@ namespace ArchitectNow.ApiStarter.Api
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces();
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
             builder.RegisterType<GlobalExceptionFilter>().AsSelf().InstancePerLifetimeScope();
-
         }
     }
 }

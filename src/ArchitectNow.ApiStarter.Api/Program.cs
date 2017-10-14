@@ -57,7 +57,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)
-                .ConfigureServices(collection => collection.AddAutofac())
                 .UseStartup<Startup>()
                 .UseSerilog(Log.Logger)
                 .Build();

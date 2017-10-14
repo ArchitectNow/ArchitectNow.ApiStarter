@@ -2,6 +2,7 @@
 {
     public class LoginResultVm
     {
-        
+        public string AuthToken { get; set; }
+        public UserVm CurrentUser { get; set; }
     }
 }
