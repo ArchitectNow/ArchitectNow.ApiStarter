@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models;
+using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
 
@@ -22,6 +23,11 @@ namespace ArchitectNow.ApiStarter.Common.Services
         public async Task<User> Register(RegistrationVm Registration)
         {
             //TODO:  Demonstrate fluent validation
+
+            if (string.IsNullOrEmpty(Registration.Email))
+            {
+                throw new ApiException<string>("Email not provided");
+            }
 
             var user = new User();
 

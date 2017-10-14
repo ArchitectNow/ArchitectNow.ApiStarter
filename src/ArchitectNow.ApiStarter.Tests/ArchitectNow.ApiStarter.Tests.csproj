@@ -6,6 +6,7 @@
     <PackageReference Include="Autofac" Version="4.6.1" />
     <PackageReference Include="AutoMapper" Version="6.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
     <PackageReference Include="xunit" Version="2.2.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
@@ -15,7 +16,6 @@
     <ProjectReference Include="..\ArchitectNow.ApiStarter.Common\ArchitectNow.ApiStarter.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ControllerTests" />
     <Folder Include="MiscTests" />
   </ItemGroup>
 </Project>
