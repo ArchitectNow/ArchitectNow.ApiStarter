@@ -1,8 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Exceptions;
+using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
+using Microsoft.Extensions.Options;
 
 namespace ArchitectNow.ApiStarter.Common.Services
 {
@@ -18,6 +25,7 @@ namespace ArchitectNow.ApiStarter.Common.Services
         public async Task<User> Login(string Email, string Password)
         {
             return await _userRepository.VerifyCredentials(Email, Password);
+           
         }
 
         public async Task<User> Register(RegistrationVm Registration)
@@ -38,5 +46,6 @@ namespace ArchitectNow.ApiStarter.Common.Services
             
             return await _userRepository.SaveAsync(user);
         }
+       
     }
 }

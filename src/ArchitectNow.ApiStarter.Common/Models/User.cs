@@ -6,7 +6,7 @@ namespace ArchitectNow.ApiStarter.Common.Models
     {
         public User()
         {
-            
+            UserRole = "";
         }
         
         public string Email { get; set; }
@@ -17,6 +17,7 @@ namespace ArchitectNow.ApiStarter.Common.Models
         
         public string NameLast { get; set; }
         
+        public string UserRole { get; set; }
         
     }
 }

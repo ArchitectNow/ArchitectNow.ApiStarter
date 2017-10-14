@@ -7,5 +7,7 @@
         public string NameFirst { get; set; }
         
         public string NameLast { get; set; }
+        
+        public string UserRole { get; set; }
     }
 }
