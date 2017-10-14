@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Reflection;
+using System.Text;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
+using ArchitectNow.ApiStarter.Common.Options;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -10,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Module = Autofac.Module;
 
 namespace ArchitectNow.ApiStarter.Api
@@ -34,6 +37,8 @@ namespace ArchitectNow.ApiStarter.Api
             
             services.AddOptions();
             
+            services.ConfigureJwt(_configuration, ConfigureSecurityKey);
+			
             services.ConfigureAutomapper(config => { });
 
             services.ConfigureApi();
@@ -70,6 +75,14 @@ namespace ArchitectNow.ApiStarter.Api
            
             _logger.LogInformation("Completing: Configure");
 
+        }
+        
+        protected virtual SecurityKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
+        {
+            var keyString = issuerOptions.Audience;
+            var keyBytes = Encoding.Unicode.GetBytes(keyString);
+            var signingKey = new SymmetricSecurityKey(keyBytes);
+            return signingKey;
         }
     }
 }

@@ -57,6 +57,8 @@ namespace ArchitectNow.ApiStarter.Api
 
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)
+//                .UseEnvironment(configuration["environment:name"]) //TODO:  Read this from appsettings
+                .UseEnvironment("development")
                 .UseStartup<Startup>()
                 .UseSerilog(Log.Logger)
                 .Build();
