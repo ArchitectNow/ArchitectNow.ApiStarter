@@ -16,8 +16,7 @@ using MongoDB.Driver;
 
 namespace ArchitectNow.ApiStarter.Common.MongoDb
 {
-    public abstract class BaseRepository<TModel, TDataContext> : IBaseRepository<TModel> where TModel : BaseDocument
-        where TDataContext : IDataContext
+    public abstract class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : BaseDocument
     {
         private readonly IValidator<TModel> _validator;
         private IMongoCollection<TModel> _collection;
@@ -26,11 +25,11 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         private string _databaseName;
 
         protected ICacheService CacheService { get; }
-        protected TDataContext CurrentContext { get; }
+        protected IDataContext CurrentContext { get; }
         protected ILogger<TModel> Logger { get; }
 
         protected BaseRepository(ILogger<TModel> logger,
-            TDataContext dataContext, ICacheService cacheService,
+            IDataContext dataContext, ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<TModel> validator = null
         )

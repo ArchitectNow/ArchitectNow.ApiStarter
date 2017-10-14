@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
 using ArchitectNow.ApiStarter.Common.Models.Options;
+using ArchitectNow.ApiStarter.Common.MongoDb;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
@@ -51,6 +54,8 @@ namespace ArchitectNow.ApiStarter.Api
             });
             
             var provider = new AutofacServiceProvider(ApplicationContainer);
+            
+            this.ConfigureMongoIndexes();
 
             _logger.LogInformation("Completing: Configure Services");
 
@@ -83,6 +88,30 @@ namespace ArchitectNow.ApiStarter.Api
             var keyBytes = Encoding.Unicode.GetBytes(keyString);
             var signingKey = new SymmetricSecurityKey(keyBytes);
             return signingKey;
+        }
+
+        private void ConfigureMongoIndexes()
+        {
+            _logger.LogInformation("Starting: Creating Mongo Indexes");
+
+            try
+            {
+                var baseRepositories = ApplicationContainer.Resolve<IEnumerable<IBaseRepository>>();
+                foreach (var baseRepository in baseRepositories)
+                {
+                    Task.Run(async () => await baseRepository.ConfigureIndexes());
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogWarning(exception, "Could not create index");
+            }
+            finally
+            {
+                _logger.LogInformation("Completing: Creating Mongo Indexes");
+
+            }
+            
         }
     }
 }

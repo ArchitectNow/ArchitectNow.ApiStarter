@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using ArchitectNow.ApiStarter.Api.Filters;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -17,7 +18,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         {
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddRouting(options => options.LowercaseUrls = true);
-            
+
             var mvcBuilder = services.AddMvc(o =>
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
@@ -41,6 +42,10 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                         new IsoDateTimeConverter(),
                         new StringEnumConverter(true)
                     };
+                })
+                .AddFluentValidation(config =>
+                {
+                    
                 });
 
         }
