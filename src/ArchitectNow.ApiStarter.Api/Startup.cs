@@ -38,6 +38,8 @@ namespace ArchitectNow.ApiStarter.Api
         {
             _logger.LogInformation("Starting: Configure Services");
             
+            services.ConfigureLogging();
+            
             services.AddOptions();
             
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
@@ -64,9 +66,11 @@ namespace ArchitectNow.ApiStarter.Api
         
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             _logger.LogInformation("Starting: Configure");
+            
+            env.ConfigureLogger(loggerFactory, configuration);
             
             app.ConfigureAssets();
             
