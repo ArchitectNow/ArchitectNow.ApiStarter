@@ -40,6 +40,12 @@ namespace ArchitectNow.ApiStarter.Api
         public void ConfigureServices(IServiceCollection services)
         {
             _logger.LogInformation("Starting: Configure Services");
+            
+            var _container = services.CreateAutofacContainer(_configuration, builder => { }, new Module[]
+            {
+                new CommonModule(),
+                new ApiModule()
+            });
 
             services.AddOptions();
             
@@ -48,12 +54,6 @@ namespace ArchitectNow.ApiStarter.Api
             services.ConfigureApi();
             
             services.ConfigureCompression();
-            
-            var _container = services.CreateAutofacContainer(_configuration, builder => { }, new Module[]
-            {
-                new CommonModule(),
-                new ApiModule()
-            });
             
             _logger.LogInformation("Completing: Configure Services");
         }
