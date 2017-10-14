@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Models.Exceptions;
+using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -29,23 +30,31 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
         public async Task<IActionResult> Login([FromBody] LoginVm parameters)
         {
-            var result =  await ServiceInvoker.AsyncOk(async () =>
+            return await ServiceInvoker.AsyncOk(async () =>
             {
                 var _user = await _securityService.Login(parameters.Email, parameters.Password);
 
                 if (_user != null)
                 {
                     var _result = new LoginResultVm();
+                    
                     _result.CurrentUser = Mapper.Map<UserVm>(_user);
                     _result.AuthToken = "abc123";
 
                     return _result;
                 }
 
-                throw new ApiException<string>("Login Error");
+                throw new ApiException<string>("Invalid Credentials");
             });
-
-            return result;
+        }
+        
+        [HttpPost("register")]
+        [AllowAnonymous]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        public async Task<IActionResult> Register([FromBody] RegistrationVm parameters)
+        {
+            return await ServiceInvoker.AsyncOk(async () => await _securityService.Register(parameters));
         }
     }
 }
