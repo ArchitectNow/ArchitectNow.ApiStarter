@@ -1,6 +1,9 @@
-﻿using ArchitectNow.ApiStarter.Api.Filters;
+﻿using System.IO;
+using ArchitectNow.ApiStarter.Api.Filters;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -40,6 +43,13 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     };
                 });
 
+        }
+        
+        public static void ConfigureAssets(this IApplicationBuilder app)
+        {
+            app.UseFileServer();
+
+            app.UseStaticFiles();
         }
     }
 }
