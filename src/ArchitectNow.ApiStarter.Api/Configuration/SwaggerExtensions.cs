@@ -20,8 +20,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 SwaggerUiRoute = "/api/docs",
                 UseJsonEditor = true,
                 FlattenInheritanceHierarchy = true,
-                IsAspNetCore = true,
-                
+                IsAspNetCore = true
+     
             };
            
             app.UseSwaggerUi(assembly, swaggerUiOwinSettings);       
