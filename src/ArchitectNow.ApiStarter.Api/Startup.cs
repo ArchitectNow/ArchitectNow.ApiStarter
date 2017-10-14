@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Text;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
-using ArchitectNow.ApiStarter.Common.Options;
+using ArchitectNow.ApiStarter.Common.Models.Options;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;

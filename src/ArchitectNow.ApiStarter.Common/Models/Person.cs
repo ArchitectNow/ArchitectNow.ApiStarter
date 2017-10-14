@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ArchitectNow.ApiStarter.Common.MongoDb;
 
 namespace ArchitectNow.ApiStarter.Common.Models
 {

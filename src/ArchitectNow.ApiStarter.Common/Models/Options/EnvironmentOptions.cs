@@ -1,4 +1,4 @@
-﻿namespace ArchitectNow.ApiStarter.Common.Options
+﻿namespace ArchitectNow.ApiStarter.Common.Models.Options
 {
     public class EnvironmentOptions
     {
