@@ -18,6 +18,7 @@ namespace ArchitectNow.ApiStarter.Common
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<MongoOptions>("mongo"))
                 .AsSelf().SingleInstance();
             
+            //TODO:  Compare this registration to what is in the AN.Framework project
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<JwtIssuerOptions>("jwtIssuerOptions"))
                 .AsSelf().SingleInstance();
             

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using NJsonSchema;
 using NSwag.AspNetCore;
 using NSwag.SwaggerGeneration;
@@ -19,11 +20,11 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 SwaggerUiRoute = "/api/docs",
                 UseJsonEditor = true,
                 FlattenInheritanceHierarchy = true,
-                IsAspNetCore = true
+                IsAspNetCore = true,
+                
             };
-            
-             app.UseSwaggerUi(assembly, swaggerUiOwinSettings);
-                   
+           
+            app.UseSwaggerUi(assembly, swaggerUiOwinSettings);       
         }
     }
 }
