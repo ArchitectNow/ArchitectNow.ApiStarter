@@ -25,7 +25,7 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
         public async Task<IActionResult> SecurityTest()
         {
-            return await ServiceInvoker.AsyncOk(async () => true);
+            return await ServiceInvoker.AsyncOk(async () =>  true);
         }
     }
 }

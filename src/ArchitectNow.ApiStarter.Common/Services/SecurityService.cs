@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models;
-using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
+using ArchitectNow.Models.Exceptions;
 
 namespace ArchitectNow.ApiStarter.Common.Services
 {

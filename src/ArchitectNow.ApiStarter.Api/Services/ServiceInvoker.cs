@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using ArchitectNow.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectNow.ApiStarter.Api.Services
