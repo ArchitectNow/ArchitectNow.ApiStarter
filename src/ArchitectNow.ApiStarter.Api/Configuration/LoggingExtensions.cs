@@ -13,23 +13,23 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
     public static class LoggingExtensions
     {
         private static readonly LoggingLevelSwitch LogEventSwitch = new LoggingLevelSwitch();
+
         public static void ConfigureLogging(this IServiceCollection services)
         {
             services.AddLogging();
             services.AddSingleton(LogEventSwitch);
         }
 
-        public static void ConfigureLogger(this IHostingEnvironment environment, ILoggerFactory loggerFactory, IConfiguration configuration)
+        public static void ConfigureLogger(this IHostingEnvironment environment, ILoggerFactory loggerFactory,
+            IConfiguration configuration)
         {
             var baseDir = environment.ContentRootPath;
             var logPath = Path.Combine(baseDir, "logs");
             if (!Directory.Exists(logPath))
-            {
                 Directory.CreateDirectory(logPath);
-            }
 
             LogEventLevel logLevel;
-			
+
             if (!Enum.TryParse(configuration["logging:logLevel:system"], true, out logLevel))
                 logLevel = LogEventLevel.Verbose;
 
@@ -51,7 +51,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             Log.Logger = logger;
 
             Log.Write(LogEventLevel.Information, "Logging has started");
-			
+
             loggerFactory.AddConsole(configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
             loggerFactory.AddSerilog(logger);

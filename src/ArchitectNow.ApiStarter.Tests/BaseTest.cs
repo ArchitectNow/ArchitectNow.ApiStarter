@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using ArchitectNow.ApiStarter.Api;
 using ArchitectNow.ApiStarter.Common;
-using ArchitectNow.ApiStarter.Common.Models;
 using Autofac;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging.Console;
 using Serilog;
 using Serilog.Events;
 using Module = Autofac.Module;
@@ -20,9 +17,9 @@ namespace ArchitectNow.ApiStarter.Tests
             var builder = new ConfigurationBuilder();
 
             var path = Path.GetFullPath(@"../../..");
-            
+
             builder.SetBasePath(path).AddJsonFile("testsettings.json");
-            
+
             var config = builder.Build();
 
             return config;
@@ -31,7 +28,7 @@ namespace ArchitectNow.ApiStarter.Tests
         public IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            
+
             builder.Register(ctx => BuildConfiguration()).As<IConfiguration>();
 
             var modules = new Module[]
@@ -39,17 +36,14 @@ namespace ArchitectNow.ApiStarter.Tests
                 new CommonModule(),
                 new ApiModule()
             };
-            
+
             foreach (var module in modules)
-            {
                 builder.RegisterModule(module);
-            }
 
             //TODO:  Need to figure out how to register ILogger in an xUnit scenario
             //builder.RegisterType<ConsoleLogger>().As<Microsoft.Extensions.Logging.ILogger<User>>().SingleInstance();
 
             return builder.Build();
-                
         }
 
         private void ConfigureLogger()
@@ -57,9 +51,7 @@ namespace ArchitectNow.ApiStarter.Tests
             var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var logPath = Path.Combine(baseDir, "logs");
             if (!Directory.Exists(logPath))
-            {
                 Directory.CreateDirectory(logPath);
-            }
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

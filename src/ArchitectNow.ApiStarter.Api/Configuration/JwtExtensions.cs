@@ -5,14 +5,13 @@ using ArchitectNow.ApiStarter.Common.Models.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ArchitectNow.ApiStarter.Api.Configuration
 {
     public static class JwtExtensions
     {
-          public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration,
+        public static void ConfigureJwt(this IServiceCollection services, IConfiguration configuration,
             Func<JwtIssuerOptions, SecurityKey> signingKey)
         {
             var jwtAppSettingOptions = configuration.GetSection(nameof(JwtIssuerOptions)).Get<JwtIssuerOptions>();
@@ -48,10 +47,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                         {
                             var task = Task.Run(() =>
                             {
-                                if (context.Request.Query.TryGetValue("securityToken", out StringValues securityToken))
-                                {
+                                if (context.Request.Query.TryGetValue("securityToken", out var securityToken))
                                     context.Token = securityToken.FirstOrDefault();
-                                }
                             });
 
                             return task;

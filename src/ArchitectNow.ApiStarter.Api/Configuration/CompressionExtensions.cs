@@ -10,10 +10,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         public static void ConfigureCompression(this IServiceCollection services)
         {
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-            services.AddResponseCompression(options =>
-            {
-                options.Providers.Add<GzipCompressionProvider>();
-            });
+            services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
         }
 
         public static void ConfigureCompression(this IApplicationBuilder app)

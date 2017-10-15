@@ -6,8 +6,8 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Task<User> GetByEmail(string Email);
+        Task<User> GetByEmail(string email);
 
-        Task<User> VerifyCredentials(string Email, string Password);
+        Task<User> VerifyCredentials(string email, string password);
     }
 }

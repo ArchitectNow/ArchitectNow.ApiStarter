@@ -6,8 +6,8 @@ namespace ArchitectNow.ApiStarter.Common.Services
 {
     public interface ISecurityService
     {
-        Task<User> Login(string Email, string Password);
+        Task<User> Login(string email, string password);
 
-        Task<User> Register(RegistrationVm Registration);
+        Task<User> Register(RegistrationVm registration);
     }
 }

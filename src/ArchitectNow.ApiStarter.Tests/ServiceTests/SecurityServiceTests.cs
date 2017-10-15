@@ -7,7 +7,6 @@ namespace ArchitectNow.ApiStarter.Tests.ServiceTests
 {
     public class SecurityServiceTests : BaseTest
     {
-
         [Fact]
         public async Task LoginTests()
         {
@@ -16,7 +15,7 @@ namespace ArchitectNow.ApiStarter.Tests.ServiceTests
             var securityService = container.Resolve<ISecurityService>();
 
             var loginResult = await securityService.Login("kvgros@architectnow.net", "testtest");
-            
+
             Assert.True(loginResult.Email.ToLower() == "kvgros@architectnow.net");
         }
     }

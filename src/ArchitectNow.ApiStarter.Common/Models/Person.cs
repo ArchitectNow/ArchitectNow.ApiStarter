@@ -9,11 +9,10 @@ namespace ArchitectNow.ApiStarter.Common.Models
         {
             Addresses = new List<Address>();
         }
-        
+
         public string NameFirst { get; set; }
         public string NameLast { get; set; }
-        
+
         public List<Address> Addresses { get; set; }
-        
     }
 }

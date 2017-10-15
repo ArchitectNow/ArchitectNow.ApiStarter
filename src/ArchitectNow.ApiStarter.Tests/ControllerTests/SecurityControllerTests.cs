@@ -6,11 +6,6 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
 {
     public class SecurityControllerTests : BaseIntegrationTest
     {
-        public SecurityControllerTests()
-        {
-            
-        }
-
         [Fact]
         public async Task LoginApiTest()
         {
@@ -24,10 +19,8 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
             response.EnsureSuccessStatusCode();
 
             var result = await GetResponse<LoginResultVm>(response);
-            
-            Assert.True(result.CurrentUser != null);
 
+            Assert.True(result.CurrentUser != null);
         }
-        
     }
 }

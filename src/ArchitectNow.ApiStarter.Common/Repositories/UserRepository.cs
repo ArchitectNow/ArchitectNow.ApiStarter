@@ -12,45 +12,42 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
 {
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        public override string CollectionName => nameof(User);
-        
         public UserRepository(ILogger<User> logger,
             IDataContext dataContext, ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<User> validator = null
         ) : base(logger, dataContext, cacheService, options, validator)
         {
-            
         }
-        
+
+        public override string CollectionName => nameof(User);
+
         public override async Task ConfigureIndexes()
         {
             await base.ConfigureIndexes();
-            
+
             var collection = GetCollection();
-            
+
             await collection.Indexes.CreateOneAsync(
                 Builders<User>.IndexKeys.Ascending(l => l.Email),
                 new CreateIndexOptions {Name = "user_email"});
         }
 
-        public async Task<User> GetByEmail(string Email)
+        public async Task<User> GetByEmail(string email)
         {
-            Email = Email.Trim().ToLower();
+            email = email.Trim().ToLower();
 
-            return await FindOneAsync(x => x.Email == Email);
+            return await FindOneAsync(x => x.Email == email);
         }
 
-        public async Task<User> VerifyCredentials(string Email, string Password)
+        public async Task<User> VerifyCredentials(string email, string password)
         {
-            var user = await GetByEmail(Email);
+            var user = await GetByEmail(email);
 
             if (user == null)
-            {
                 return null;
-            }
 
-            return user.Password == Password ? user : null;
+            return user.Password == password ? user : null;
         }
     }
 }

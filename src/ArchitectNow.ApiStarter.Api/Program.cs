@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
-using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,9 +16,7 @@ namespace ArchitectNow.ApiStarter.Api
             var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var logPath = Path.Combine(baseDir, "logs");
             if (!Directory.Exists(logPath))
-            {
                 Directory.CreateDirectory(logPath);
-            }
 
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()

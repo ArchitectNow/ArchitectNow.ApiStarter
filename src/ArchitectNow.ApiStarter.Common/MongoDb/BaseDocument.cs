@@ -11,15 +11,14 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
     {
         public BaseDocument()
         {
-            CreatedDate = DateTime.UtcNow;
             IsActive = true;
         }
-        
+
         [BsonId(IdGenerator = typeof(CombGuidGenerator))]
         public Guid Id { get; set; }
-        
+
         public bool IsActive { get; set; }
-        
+
         public DateTimeOffset? CreatedDate { get; set; } = DateTime.UtcNow;
 
         public DateTimeOffset? UpdatedDate { get; set; } = DateTime.UtcNow;

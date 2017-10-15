@@ -11,10 +11,10 @@ using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Services;
+using ArchitectNow.ApiStarter.Api.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using NSwag.Annotations;
 
@@ -22,18 +22,18 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
 {
     public class SecurityController : ApiV1BaseController
     {
-        private readonly ISecurityService _securityService;
         private readonly JwtIssuerOptions _jwtOptions;
-        
-        public SecurityController(ISecurityService securityService, 
-            IMapper mapper, 
+        private readonly ISecurityService _securityService;
+
+        public SecurityController(ISecurityService securityService,
+            IMapper mapper,
             IServiceInvoker serviceInvoker,
             IOptions<JwtIssuerOptions> jwtOptions) : base(mapper, serviceInvoker)
         {
             _securityService = securityService;
             _jwtOptions = jwtOptions.Value;
         }
-        
+
         [HttpPost("login")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
@@ -47,19 +47,19 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
                 if (user != null)
                 {
                     var result = new LoginResultVm();
-                    
+
                     var tokenRequest = await BuildTokenRequest(user);
-                    
+
                     result.CurrentUser = Mapper.Map<UserVm>(user);
                     result.AuthToken = tokenRequest.Token;
-                    
+
                     return result;
                 }
 
                 throw new ApiException<string>("Invalid Credentials");
             });
         }
-        
+
         [HttpPost("register")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
@@ -68,7 +68,7 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
         {
             return await ServiceInvoker.AsyncOk(async () => await _securityService.Register(parameters));
         }
-        
+
         private async Task<TokenVm> BuildTokenRequest(User user)
         {
             var identity = GenerateClaimsIdentity(user);
@@ -78,10 +78,9 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
 
         private ClaimsIdentity GenerateClaimsIdentity(User user)
         {
-
             var claims = new List<Claim>
             {
-                new Claim("Role", user.UserRole.ToString()),
+                new Claim("Role", user.UserRole),
                 new Claim("Id", user.Id.ToString())
             };
 
@@ -91,8 +90,8 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
         /// <returns>Date converted to seconds since Unix epoch (Jan 1, 1970, midnight UTC).</returns>
         private static long ToUnixEpochDate(DateTime date)
         {
-            return (long)Math.Round((date.ToUniversalTime() -
-                                     new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
+            return (long) Math.Round((date.ToUniversalTime() -
+                                      new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .TotalSeconds);
         }
 
@@ -118,13 +117,13 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
                 _jwtOptions.NotBefore,
                 _jwtOptions.Expiration,
                 _jwtOptions.SigningCredentials);
-            
+
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
             var token = new TokenVm
             {
-                ExpiresAt = DateTimeOffset.UtcNow.AddSeconds((int)_jwtOptions.ValidFor.TotalSeconds),
+                ExpiresAt = DateTimeOffset.UtcNow.AddSeconds((int) _jwtOptions.ValidFor.TotalSeconds),
                 Token = encodedJwt,
-                Email = user.Email 
+                Email = user.Email
             };
 
             return token;

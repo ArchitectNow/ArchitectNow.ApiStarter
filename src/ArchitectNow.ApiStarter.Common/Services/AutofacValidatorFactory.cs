@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace ArchitectNow.ApiStarter.Common.Services
 {
-    class AutofacValidatorFactory : ValidatorFactoryBase
+    internal class AutofacValidatorFactory : ValidatorFactoryBase
     {
         private readonly IComponentContext _componentContext;
 
@@ -12,9 +12,10 @@ namespace ArchitectNow.ApiStarter.Common.Services
         {
             _componentContext = componentContext;
         }
+
         public override IValidator CreateInstance(Type validatorType)
         {
-            return (IValidator)_componentContext.ResolveOptional(validatorType);
+            return (IValidator) _componentContext.ResolveOptional(validatorType);
         }
     }
 }

@@ -5,6 +5,5 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
 {
     public interface IPersonRepository : IBaseRepository<Person>
     {
-        
     }
 }

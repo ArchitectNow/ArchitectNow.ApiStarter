@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Services;
 using FluentValidation;
@@ -18,15 +17,11 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 {
     public abstract class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : BaseDocument
     {
-        private readonly IValidator<TModel> _validator;
-        private IMongoCollection<TModel> _collection;
         private readonly MongoOptions _options;
+        private readonly IValidator<TModel> _validator;
         private MongoClient _client;
+        private IMongoCollection<TModel> _collection;
         private string _databaseName;
-
-        protected ICacheService CacheService { get; }
-        protected IDataContext CurrentContext { get; }
-        protected ILogger<TModel> Logger { get; }
 
         protected BaseRepository(ILogger<TModel> logger,
             IDataContext dataContext, ICacheService cacheService,
@@ -43,35 +38,11 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             InitClient();
         }
 
+        protected ICacheService CacheService { get; }
+        protected IDataContext CurrentContext { get; }
+        protected ILogger<TModel> Logger { get; }
+
         public IMongoDatabase Database => _client.GetDatabase(_databaseName);
-
-        private void InitClient()
-        {
-            var connectionString = _options.ConnectionString;
-
-            if (string.IsNullOrEmpty(connectionString))
-            {
-                throw new Exception("No DB connection found");
-            }
-
-            var pack = new ConventionPack
-            {
-                new EnumRepresentationConvention(BsonType.String),
-                new CamelCaseElementNameConvention()
-            };
-
-            ConventionRegistry.Register("AN Conventions", pack, t => true);
-            MongoDefaults.MaxConnectionIdleTime = TimeSpan.FromMinutes(1);
-
-            _databaseName = _options.DatabaseName;
-
-            if (string.IsNullOrEmpty(_databaseName))
-            {
-                throw new Exception("No database name found");
-            }
-
-            _client = new MongoClient(connectionString);
-        }
 
         /// <summary>
         ///     Gets the data query.
@@ -104,7 +75,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public virtual async Task<bool> DeleteAllAsync()
         {
-
             var filter = new BsonDocument();
             await GetCollection().DeleteManyAsync(filter);
 
@@ -149,9 +119,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
                 item.UpdatedDate = DateTime.UtcNow;
 
             if (HasValidUser())
-            {
                 item.OwnerUserId = CurrentContext.CurrentUserId;
-            }
 
             var errors = await ValidateObject(item);
 
@@ -212,6 +180,30 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         public virtual async Task ConfigureIndexes()
         {
             await CreateIndex("Id", Builders<TModel>.IndexKeys.Ascending(x => x.Id).Ascending(x => x.IsActive));
+        }
+
+        private void InitClient()
+        {
+            var connectionString = _options.ConnectionString;
+
+            if (string.IsNullOrEmpty(connectionString))
+                throw new Exception("No DB connection found");
+
+            var pack = new ConventionPack
+            {
+                new EnumRepresentationConvention(BsonType.String),
+                new CamelCaseElementNameConvention()
+            };
+
+            ConventionRegistry.Register("AN Conventions", pack, t => true);
+            MongoDefaults.MaxConnectionIdleTime = TimeSpan.FromMinutes(1);
+
+            _databaseName = _options.DatabaseName;
+
+            if (string.IsNullOrEmpty(_databaseName))
+                throw new Exception("No database name found");
+
+            _client = new MongoClient(connectionString);
         }
 
         /// <summary>
@@ -280,7 +272,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         {
             return await GetCollection().Find(filter).ToListAsync();
         }
-        
+
         protected async Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> filter)
         {
             return await GetCollection().Find(filter).FirstOrDefaultAsync();

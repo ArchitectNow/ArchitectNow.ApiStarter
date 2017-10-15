@@ -1,4 +1,3 @@
-using System;
 using Xunit;
 
 namespace ArchitectNow.ApiStarter.Tests.ServiceTests
@@ -8,7 +7,6 @@ namespace ArchitectNow.ApiStarter.Tests.ServiceTests
         [Fact]
         public void LoadTests()
         {
-            
         }
     }
 }

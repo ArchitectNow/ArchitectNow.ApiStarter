@@ -16,7 +16,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using Module = Autofac.Module;
 
 namespace ArchitectNow.ApiStarter.Api
 {
@@ -24,68 +23,67 @@ namespace ArchitectNow.ApiStarter.Api
     {
         private readonly IConfiguration _configuration;
         private readonly ILogger<Startup> _logger;
-        protected IContainer ApplicationContainer { get; private set; }
 
         public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             _configuration = configuration;
             _logger = logger;
         }
-        
+
+        protected IContainer ApplicationContainer { get; private set; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             _logger.LogInformation("Starting: Configure Services");
-            
+
             services.ConfigureLogging();
-            
+
             services.AddOptions();
-            
+
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
-			
+
             services.ConfigureAutomapper(config => { });
 
             services.ConfigureApi();
-            
+
             services.ConfigureCompression();
-            
-            ApplicationContainer = services.ConfigureAutofacContainer(_configuration, b => { }, new Module[]
-            {
-                new CommonModule(), new ApiModule()
-            });
-            
+
+            ApplicationContainer =
+                services.ConfigureAutofacContainer(_configuration, b => { }, new CommonModule(), new ApiModule());
+
             var provider = new AutofacServiceProvider(ApplicationContainer);
-            
-            this.ConfigureMongoIndexes();
+
+            ConfigureMongoIndexes();
 
             _logger.LogInformation("Completing: Configure Services");
 
             return provider;
         }
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration, ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration,
+            ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
         {
             _logger.LogInformation("Starting: Configure");
-            
-            env.ConfigureLogger(loggerFactory, configuration);
-            
-            app.ConfigureAssets();
-            
-            app.ConfigureSwagger(Assembly.GetExecutingAssembly());
-            
-            app.ConfigureCompression();
-            
-            app.UseMvc();
-            
-            app.Run(async (context) => { await context.Response.WriteAsync("Hello World!"); });
-           
-            _logger.LogInformation("Completing: Configure");
 
+            env.ConfigureLogger(loggerFactory, configuration);
+
+            app.ConfigureAssets();
+
+            app.ConfigureSwagger(Assembly.GetExecutingAssembly());
+
+            app.ConfigureCompression();
+
+            app.UseMvc();
+
+            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
+
+            _logger.LogInformation("Completing: Configure");
         }
-        
+
         protected virtual SecurityKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
         {
             var keyString = issuerOptions.Audience;
@@ -102,9 +100,7 @@ namespace ArchitectNow.ApiStarter.Api
             {
                 var baseRepositories = ApplicationContainer.Resolve<IEnumerable<IBaseRepository>>();
                 foreach (var baseRepository in baseRepositories)
-                {
                     Task.Run(async () => await baseRepository.ConfigureIndexes());
-                }
             }
             catch (Exception exception)
             {
@@ -113,9 +109,7 @@ namespace ArchitectNow.ApiStarter.Api
             finally
             {
                 _logger.LogInformation("Completing: Creating Mongo Indexes");
-
             }
-            
         }
     }
 }
