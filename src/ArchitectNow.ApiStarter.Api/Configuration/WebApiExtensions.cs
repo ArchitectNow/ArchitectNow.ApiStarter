@@ -1,4 +1,5 @@
-﻿using ArchitectNow.ApiStarter.Api.Filters;
+﻿using System.Collections.Generic;
+using ArchitectNow.ApiStarter.Api.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -25,8 +26,10 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     var policy = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
                         .Build();
-
+                    
                     o.Filters.Add(new AuthorizeFilter(policy));
+                    
+                    
                 })
                 .AddJsonOptions(options =>
                 {

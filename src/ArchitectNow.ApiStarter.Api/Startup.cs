@@ -52,6 +52,8 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.ConfigureCompression();
 
+            services.AddMemoryCache();
+
             ApplicationContainer =
                 services.ConfigureAutofacContainer(_configuration, b => { }, new CommonModule(), new ApiModule());
 
@@ -72,16 +74,14 @@ namespace ArchitectNow.ApiStarter.Api
             _logger.LogInformation("Starting: Configure");
 
             env.ConfigureLogger(loggerFactory, configuration);
-
-            app.ConfigureAssets();
-
+            
             app.ConfigureSwagger(Assembly.GetExecutingAssembly());
 
             app.ConfigureCompression();
+            
+            app.ConfigureAssets();
 
             app.UseMvc();
-
-            app.Run(async context => { await context.Response.WriteAsync("Hello World!"); });
 
             _logger.LogInformation("Completing: Configure");
         }
