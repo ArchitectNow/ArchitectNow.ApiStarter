@@ -2,6 +2,7 @@
 using ArchitectNow.ApiStarter.Common.Services;
 using Autofac;
 using Xunit;
+using FluentAssertions;
 
 namespace ArchitectNow.ApiStarter.Tests.ServiceTests
 {
@@ -10,13 +11,11 @@ namespace ArchitectNow.ApiStarter.Tests.ServiceTests
         [Fact]
         public async Task LoginTests()
         {
-            var container = BuildContainer();
-
-            var securityService = container.Resolve<ISecurityService>();
+            var securityService = Scope.Resolve<ISecurityService>();
 
             var loginResult = await securityService.Login("kvgros@architectnow.net", "testtest");
 
-            Assert.True(loginResult.Email.ToLower() == "kvgros@architectnow.net");
+            loginResult.Email.Should().Be("kvgros@architectnow.net");
         }
     }
 }
