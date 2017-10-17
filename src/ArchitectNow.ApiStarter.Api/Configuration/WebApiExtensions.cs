@@ -41,7 +41,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                         new StringEnumConverter(true)
                     };
                 })
-                .AddFluentValidation(config => { });
+                .AddFluentValidation();
         }
 
         public static void ConfigureAssets(this IApplicationBuilder app)

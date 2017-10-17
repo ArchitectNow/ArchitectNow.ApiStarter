@@ -26,6 +26,7 @@ namespace ArchitectNow.ApiStarter.Api
                 .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
+            
             try
             {
                 BuildWebHost(args)
@@ -45,20 +46,22 @@ namespace ArchitectNow.ApiStarter.Api
 
         private static IWebHost BuildWebHost(string[] args)
         {
+            //pulls in environment from cli args or env vars
             var builder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json", true, true)
                 .AddEnvironmentVariables()
                 .AddCommandLine(args);
 
             var configuration = builder.Build();
 
+            //https://github.com/aspnet/MetaPackages/blob/633cb681493c0958a9d215624c173db29e20c23d/src/Microsoft.AspNetCore/WebHost.cs
+            
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)
-//                .UseEnvironment(configuration["environment:name"]) //TODO:  Read this from appsettings
-                .UseEnvironment("development")
                 .UseStartup<Startup>()
                 .UseSerilog(Log.Logger)
                 .Build();
         }
+        
+        
     }
 }

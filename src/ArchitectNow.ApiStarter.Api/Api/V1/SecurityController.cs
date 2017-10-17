@@ -11,7 +11,7 @@ using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Services;
 using ArchitectNow.ApiStarter.Api.Services;
-using ArchitectNow.Models.Exceptions;
+using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

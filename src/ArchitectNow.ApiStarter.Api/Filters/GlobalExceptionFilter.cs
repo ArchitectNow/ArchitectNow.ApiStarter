@@ -1,5 +1,5 @@
 ﻿using System;
-using ArchitectNow.Web.Services;
+using ArchitectNow.ApiStarter.Api.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ArchitectNow.ApiStarter.Api.Filters

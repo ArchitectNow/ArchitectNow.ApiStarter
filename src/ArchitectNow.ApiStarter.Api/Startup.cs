@@ -24,10 +24,12 @@ namespace ArchitectNow.ApiStarter.Api
         private readonly IConfiguration _configuration;
         private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, ILogger<Startup> logger, IHostingEnvironment hostingEnvironment)
         {
             _configuration = configuration;
             _logger = logger;
+            
+            logger.LogInformation($"Constructing for environment: {hostingEnvironment.EnvironmentName}");
         }
 
         protected IContainer ApplicationContainer { get; private set; }
@@ -86,6 +88,7 @@ namespace ArchitectNow.ApiStarter.Api
 
         protected virtual SecurityKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
         {
+            //this would be more secure, value pulled from KeyVault
             var keyString = issuerOptions.Audience;
             var keyBytes = Encoding.Unicode.GetBytes(keyString);
             var signingKey = new SymmetricSecurityKey(keyBytes);

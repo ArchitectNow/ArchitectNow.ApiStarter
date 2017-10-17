@@ -37,12 +37,4 @@
   <ItemGroup>
     <ProjectReference Include="..\ArchitectNow.ApiStarter.Common\ArchitectNow.ApiStarter.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Web\Services\ExceptionResultBuilder.cs">
-      <Link>Services/ExceptionResultBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\ArchitectNow.Framework\src\ArchitectNow.Web\Services\IExceptionResultBuilder.cs">
-      <Link>Services/IExceptionResultBuilder.cs</Link>
-    </Compile>
-  </ItemGroup>
 </Project>
