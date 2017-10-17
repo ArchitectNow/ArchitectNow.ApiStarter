@@ -27,12 +27,14 @@ namespace ArchitectNow.ApiStarter.Common.Services
             if (string.IsNullOrEmpty(registration.Email))
                 throw new ApiException<string>("Email not provided");
 
-            var user = new User();
+            var user = new User
+            {
+                Email = registration.Email,
+                Password = registration.Password,
+                NameFirst = registration.NameFirst,
+                NameLast = registration.NameLast
+            };
 
-            user.Email = registration.Email;
-            user.Password = registration.Password;
-            user.NameFirst = registration.NameFirst;
-            user.NameLast = registration.NameLast;
 
             return await _userRepository.SaveAsync(user);
         }

@@ -1,7 +1,9 @@
 ﻿using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using NJsonSchema;
+using NSwag;
 using NSwag.AspNetCore;
+using NSwag.SwaggerGeneration.WebApi.Processors.Security;
 
 namespace ArchitectNow.ApiStarter.Api.Configuration
 {
@@ -19,6 +21,14 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 FlattenInheritanceHierarchy = true,
                 IsAspNetCore = true
             };
+
+            swaggerUiOwinSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
+                {
+                    Type = SwaggerSecuritySchemeType.ApiKey,
+                    Name = "Authorization",
+                    In = SwaggerSecurityApiKeyLocation.Header
+                })
+            );
 
             app.UseSwaggerUi(assembly, swaggerUiOwinSettings);
         }
