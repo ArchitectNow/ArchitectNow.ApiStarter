@@ -1,0 +1,52 @@
+﻿{
+  "swaggerGenerator": {
+    "fromSwagger": {      
+      "url": "http://localhost:5150/api/docs/v1/swagger.json",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "swaggerToCSharpClient": {
+      "clientBaseClass": "BaseClient",
+      "generateClientClasses": true,
+      "generateClientInterfaces": true,
+      "generateDtoTypes": true,
+      "injectHttpClient": false,
+      "disposeHttpClient": true,
+      "generateExceptionClasses": true,
+      "exceptionClass": "SwaggerException",
+      "wrapDtoExceptions": true,
+      "useHttpClientCreationMethod": true,
+      "httpClientType": "System.Net.Http.HttpClient",
+      "useHttpRequestMessageCreationMethod": false,
+      "useBaseUrl": true,
+      "generateSyncMethods": false,
+      "clientClassAccessModifier": "public",
+      "generateContractsOutput": false,
+      "parameterDateTimeFormat": "s",
+      "generateUpdateJsonSerializerSettingsMethod": true,
+      "className": "{controller}Client",
+      "namespace": "ArchitectNow.ApiStarter.Api.Client",
+      "generateOptionalParameters": true,
+      "requiredPropertiesMustBeDefined": true,
+      "dateType": "System.DateTimeOffset",
+      "dateTimeType": "System.DateTimeOffset",
+      "timeType": "System.TimeSpan",
+      "timeSpanType": "System.TimeSpan",
+      "arrayType": "System.Collections.Generic.List",
+      "dictionaryType": "System.Collections.Generic.Dictionary",
+      "classStyle": "Poco",
+      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "generateDefaultValues": true,
+      "generateDataAnnotations": true,
+      "excludedTypeNames": [],
+      "wrapResponses": false,
+      "generateResponseClasses": true,
+      "responseClass": "SwaggerResponse",
+      "handleReferences": false,
+      "generateImmutableArrayProperties": false,
+      "generateImmutableDictionaryProperties": false,
+      "output": "Client.cs"
+    }
+  }
+}
