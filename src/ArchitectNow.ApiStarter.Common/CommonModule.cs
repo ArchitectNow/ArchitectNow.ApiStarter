@@ -25,8 +25,10 @@ namespace ArchitectNow.ApiStarter.Common
             {
                 var configuration = context.Resolve<IConfiguration>();
                 var issuerOptions = configuration.GetSection("jwtIssuerOptions").Get<JwtIssuerOptions>();
-
-                var keyBytes= Encoding.ASCII.GetBytes(issuerOptions.Audience);
+                
+                var keyString = issuerOptions.Audience;
+                var keyBytes = Encoding.Unicode.GetBytes(keyString);
+                
                 var key = new JwtSigningKey(keyBytes);
 
                 issuerOptions.SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
