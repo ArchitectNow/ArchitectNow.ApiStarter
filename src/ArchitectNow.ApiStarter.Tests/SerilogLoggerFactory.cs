@@ -18,14 +18,14 @@ namespace ArchitectNow.ApiStarter.Tests
             _provider.Dispose();
         }
 
-        public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
+        public ILogger CreateLogger(string categoryName)
         {
             return _provider.CreateLogger(categoryName);
         }
 
         public void AddProvider(ILoggerProvider provider)
         {
-            SelfLog.WriteLine("Ignoring added logger provider {0}", (object) provider, (object) null, (object) null);
+            SelfLog.WriteLine("Ignoring added logger provider {0}", provider);
         }
     }
 }

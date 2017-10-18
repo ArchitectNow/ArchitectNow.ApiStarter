@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Models.ViewModels;
+using FluentAssertions;
 using Xunit;
 
 namespace ArchitectNow.ApiStarter.Tests.ControllerTests
@@ -7,12 +8,13 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
     public class SecurityControllerTests : BaseIntegrationTest
     {
         [Fact]
-        public async Task LoginApiTest()
+        public async Task LoginApiTest_Should_ReturnUser()
         {
-            var loginParams = new LoginVm();
-
-            loginParams.Email = "dummy";
-            loginParams.Password = "asdfad";
+            var loginParams = new LoginVm
+            {
+                Email = "dummy",
+                Password = "asdfad"
+            };
 
             var response = await Client.PostAsync("/api/v1/security/login", BuildHttpContent(loginParams));
 
@@ -20,7 +22,7 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
 
             var result = await GetResponse<LoginResultVm>(response);
 
-            Assert.True(result.CurrentUser != null);
+            result.CurrentUser.Should().NotBeNull();
         }
     }
 }

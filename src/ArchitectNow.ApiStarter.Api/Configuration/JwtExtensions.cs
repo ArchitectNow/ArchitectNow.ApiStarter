@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -40,6 +41,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 })
                 .AddJwtBearer(options =>
                 {
+                    options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = tokenValidationParameters;
                     options.Events = new JwtBearerEvents
                     {
@@ -55,6 +57,11 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                         }
                     };
                 });
+        }
+        
+        public static void ConfigureJwt(this IApplicationBuilder app)
+        {
+            app.UseAuthentication();
         }
     }
 }

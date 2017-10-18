@@ -13,7 +13,7 @@ namespace ArchitectNow.ApiStarter.Common.Services
         public SecurityService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-        }
+        }    
 
         public async Task<User> Login(string email, string password)
         {

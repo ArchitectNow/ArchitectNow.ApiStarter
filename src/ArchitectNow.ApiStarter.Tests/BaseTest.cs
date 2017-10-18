@@ -1,11 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
 using ArchitectNow.ApiStarter.Api;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
 using Autofac;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -73,7 +71,7 @@ namespace ArchitectNow.ApiStarter.Tests
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
             
-            collection.AddSingleton((ILoggerFactory) new SerilogLoggerFactory(Log.Logger, false));
+            collection.AddSingleton((ILoggerFactory) new SerilogLoggerFactory(Log.Logger));
         }
     }
 }

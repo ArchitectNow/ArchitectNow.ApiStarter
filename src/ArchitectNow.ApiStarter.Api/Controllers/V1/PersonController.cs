@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using ArchitectNow.ApiStarter.Common.Repositories;
 using ArchitectNow.ApiStarter.Api.Services;
+using ArchitectNow.ApiStarter.Common.Repositories;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
-namespace ArchitectNow.ApiStarter.Api.Api.V1
+namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
     public class PersonController : ApiV1BaseController
     {

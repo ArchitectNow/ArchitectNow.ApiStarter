@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NSwag.Annotations;
 
-namespace ArchitectNow.ApiStarter.Api.Api.V1
+namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
     [SwaggerResponse(HttpStatusCode.NotFound, typeof(void))]
     [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationError[]))]
@@ -18,14 +18,14 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
     [Route("api/v1/[controller]")]
     public abstract class ApiV1BaseController : Controller
     {
-        public ApiV1BaseController(IMapper mapper, IServiceInvoker serviceInvoker)
+        protected ApiV1BaseController(IMapper mapper, IServiceInvoker serviceInvoker)
         {
             Mapper = mapper;
             ServiceInvoker = serviceInvoker;
         }
 
-        public IMapper Mapper { get; }
-        public IServiceInvoker ServiceInvoker { get; }
+        protected IMapper Mapper { get; }
+        protected IServiceInvoker ServiceInvoker { get; }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

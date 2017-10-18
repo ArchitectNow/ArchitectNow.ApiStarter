@@ -6,19 +6,19 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Models.ViewModels;
+using ArchitectNow.ApiStarter.Api.Services;
 using ArchitectNow.ApiStarter.Common.Models;
+using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Services;
-using ArchitectNow.ApiStarter.Api.Services;
-using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NSwag.Annotations;
 
-namespace ArchitectNow.ApiStarter.Api.Api.V1
+namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
     public class SecurityController : ApiV1BaseController
     {
@@ -94,7 +94,7 @@ namespace ArchitectNow.ApiStarter.Api.Api.V1
                                       new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .TotalSeconds);
         }
-
+        
         private async Task<TokenVm> GenerateTokenRequest(User user, ClaimsIdentity identity)
         {
             var claims = new List<Claim>

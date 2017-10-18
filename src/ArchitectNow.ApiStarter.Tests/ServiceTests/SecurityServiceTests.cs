@@ -9,7 +9,7 @@ namespace ArchitectNow.ApiStarter.Tests.ServiceTests
     public class SecurityServiceTests : BaseTest
     {
         [Fact]
-        public async Task LoginTests()
+        public async Task Login_Should_ReturnEmail()
         {
             var securityService = Scope.Resolve<ISecurityService>();
 

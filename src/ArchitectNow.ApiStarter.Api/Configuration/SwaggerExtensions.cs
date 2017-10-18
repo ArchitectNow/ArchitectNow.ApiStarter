@@ -17,7 +17,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 Title = "ArchitectNow.ApiStarter",
                 SwaggerRoute = "/api/docs/v1/swagger.json",
                 SwaggerUiRoute = "/api/docs",
-                UseJsonEditor = true,
+                UseJsonEditor = false,
                 FlattenInheritanceHierarchy = true,
                 IsAspNetCore = true
             };

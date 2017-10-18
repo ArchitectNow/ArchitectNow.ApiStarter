@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -66,7 +66,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             return provider;
         }
-        
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration,
@@ -75,11 +75,15 @@ namespace ArchitectNow.ApiStarter.Api
             _logger.LogInformation("Starting: Configure");
 
             env.ConfigureLogger(loggerFactory, configuration);
+
+            app.ConfigureJwt();
+
+            app.ConfigureAssets();
             
             app.ConfigureSwagger(Assembly.GetExecutingAssembly());
 
             app.ConfigureCompression();
-            
+
             app.ConfigureAssets();
 
             app.UseMvc();
@@ -91,7 +95,7 @@ namespace ArchitectNow.ApiStarter.Api
         {
             //this would be more secure, value pulled from KeyVault
             var keyString = issuerOptions.Audience;
-            var keyBytes = Encoding.Unicode.GetBytes(keyString);
+            var keyBytes = Encoding.UTF8.GetBytes(keyString);
             var signingKey = new JwtSigningKey(keyBytes);
             return signingKey;
         }
