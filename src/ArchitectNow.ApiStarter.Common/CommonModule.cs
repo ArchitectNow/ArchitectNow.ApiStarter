@@ -1,7 +1,11 @@
-﻿using ArchitectNow.ApiStarter.Common.Models.Options;
+﻿using System.Text;
+using ArchitectNow.ApiStarter.Common.Models.Options;
+using ArchitectNow.ApiStarter.Common.Models.Security;
 using ArchitectNow.ApiStarter.Common.MongoDb;
 using Autofac;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ArchitectNow.ApiStarter.Common
 {
@@ -17,9 +21,18 @@ namespace ArchitectNow.ApiStarter.Common
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<MongoOptions>("mongo"))
                 .AsSelf().SingleInstance();
 
-            //TODO:  Compare this registration to what is in the AN.Framework project
-            builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<JwtIssuerOptions>("jwtIssuerOptions"))
-                .AsSelf().SingleInstance();
+            builder.Register(context =>
+            {
+                var configuration = context.Resolve<IConfiguration>();
+                var issuerOptions = configuration.GetSection("jwtIssuerOptions").Get<JwtIssuerOptions>();
+
+                var keyBytes= Encoding.ASCII.GetBytes(issuerOptions.Audience);
+                var key = new JwtSigningKey(keyBytes);
+
+                issuerOptions.SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+
+                return new OptionsWrapper<JwtIssuerOptions>(issuerOptions);
+            }).As<IOptions<JwtIssuerOptions>>().InstancePerLifetimeScope();
 
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<EnvironmentOptions>("environment"))
                 .AsSelf().SingleInstance();

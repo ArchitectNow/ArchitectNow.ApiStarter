@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
 using ArchitectNow.ApiStarter.Common.Models.Options;
+using ArchitectNow.ApiStarter.Common.Models.Security;
 using ArchitectNow.ApiStarter.Common.MongoDb;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -65,7 +66,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             return provider;
         }
-
+        
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration,
@@ -91,7 +92,7 @@ namespace ArchitectNow.ApiStarter.Api
             //this would be more secure, value pulled from KeyVault
             var keyString = issuerOptions.Audience;
             var keyBytes = Encoding.Unicode.GetBytes(keyString);
-            var signingKey = new SymmetricSecurityKey(keyBytes);
+            var signingKey = new JwtSigningKey(keyBytes);
             return signingKey;
         }
 
