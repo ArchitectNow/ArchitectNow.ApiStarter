@@ -35,9 +35,6 @@ namespace ArchitectNow.ApiStarter.Common
 
                 return new OptionsWrapper<JwtIssuerOptions>(issuerOptions);
             }).As<IOptions<JwtIssuerOptions>>().InstancePerLifetimeScope();
-
-            builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<EnvironmentOptions>("environment"))
-                .AsSelf().SingleInstance();
         }
     }
 }
