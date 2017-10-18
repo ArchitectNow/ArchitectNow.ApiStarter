@@ -40,4 +40,7 @@
   <ItemGroup>
     <None Remove="Utilities\**" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Services\AutofacValidatorFactory.cs" />
+  </ItemGroup>
 </Project>

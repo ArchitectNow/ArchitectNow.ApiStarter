@@ -1,0 +1,43 @@
+{
+  "swaggerGenerator": {
+    "fromSwagger": {
+      "json": null,
+      "url": "http://localhost:5000/api/docs/v1/swagger.json",
+      "output": null
+    }
+  },
+  "codeGenerators": {
+    "swaggerToTypeScriptClient": {
+      "className": "{controller}Client",
+      "moduleName": "",
+      "namespace": "",
+      "typeScriptVersion": 2.0,
+      "template": "Angular",
+      "promiseType": "Promise",
+      "dateTimeType": "MomentJS",
+      "nullValue": "Null",
+      "generateClientClasses": true,
+      "generateClientInterfaces": false,
+      "generateOptionalParameters": true,
+      "wrapDtoExceptions": false,
+      "clientBaseClass": "BaseClient",
+      "useTransformOptionsMethod": true,
+      "useTransformResultMethod": false,
+      "generateDtoTypes": true,
+      "operationGenerationMode": "MultipleClientsFromOperationId",
+      "markOptionalProperties": true,
+      "generateCloneMethod": false,
+      "typeStyle": "Class",
+      "generateDefaultValues": true,
+      "excludedTypeNames": [],
+      "handleReferences": false,
+      "generateConstructorInterface": true,
+      "importRequiredTypes": true,
+      "useGetBaseUrlMethod": false,
+      "baseUrlTokenName": "API_BASE_URL",
+      "serviceSchemes": [],
+      "output": "VendorSurf.WebUI/src/app/api.ts",
+      "clientBaseClass": "BaseClient"
+    }
+  }
+}
