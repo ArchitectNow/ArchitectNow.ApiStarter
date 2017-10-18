@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using ArchitectNow.ApiStarter.Api.Filters;
+﻿using ArchitectNow.ApiStarter.Api.Filters;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
