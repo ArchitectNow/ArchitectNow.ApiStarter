@@ -37,11 +37,11 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         {
             return await ServiceInvoker.AsyncOk(() => _currentUserService.GetUserInformation());
         }
-        
+
         [HttpGet("search/{Id}")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
-        public async Task<IActionResult> Search([FromRoute]string Id, [FromQuery]string SearchParams = "")
+        public async Task<IActionResult> Search([FromRoute] string Id, [FromQuery] string SearchParams = "")
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
@@ -50,11 +50,11 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
                 return people.Select(x => Mapper.Map<PersonVm>(x));
             });
         }
-        
+
         [HttpPost("update")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
-        public async Task<IActionResult> Update([FromBody]PersonVm data)
+        public async Task<IActionResult> Update([FromBody] PersonVm data)
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
@@ -65,24 +65,18 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
                     newItem = await _personRepository.SaveAsync(newItem);
 
                     return Mapper.Map<PersonVm>(newItem);
-
                 }
-                else
-                {
-                    var existingItem = 
-                        await _personRepository.GetOneAsync(data.Id.Value);
+                var existingItem =
+                    await _personRepository.GetOneAsync(data.Id.Value);
 
-                    if (existingItem == null)
-                    {
-                        throw new NotFoundException(nameof(Person), data.Id.Value);
-                    }
+                if (existingItem == null)
+                    throw new NotFoundException(nameof(Person), data.Id.Value);
 
-                    existingItem = Mapper.Map(data, existingItem);
-                    
-                    existingItem = await _personRepository.SaveAsync(existingItem);
+                existingItem = Mapper.Map(data, existingItem);
 
-                    return Mapper.Map<PersonVm>(existingItem);
-                }
+                existingItem = await _personRepository.SaveAsync(existingItem);
+
+                return Mapper.Map<PersonVm>(existingItem);
             });
         }
     }

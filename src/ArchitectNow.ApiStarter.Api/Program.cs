@@ -26,7 +26,7 @@ namespace ArchitectNow.ApiStarter.Api
                 .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
-            
+
             try
             {
                 BuildWebHost(args)
@@ -54,14 +54,12 @@ namespace ArchitectNow.ApiStarter.Api
             var configuration = builder.Build();
 
             //https://github.com/aspnet/MetaPackages/blob/633cb681493c0958a9d215624c173db29e20c23d/src/Microsoft.AspNetCore/WebHost.cs
-            
+
             return WebHost.CreateDefaultBuilder(args)
                 .UseConfiguration(configuration)
                 .UseStartup<Startup>()
                 .UseSerilog(Log.Logger)
                 .Build();
         }
-        
-        
     }
 }

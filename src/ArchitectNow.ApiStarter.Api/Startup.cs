@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -28,7 +28,7 @@ namespace ArchitectNow.ApiStarter.Api
         {
             _configuration = configuration;
             _logger = logger;
-            
+
             logger.LogInformation($"Constructing for environment: {hostingEnvironment.EnvironmentName}");
         }
 
@@ -78,7 +78,7 @@ namespace ArchitectNow.ApiStarter.Api
             app.ConfigureJwt();
 
             app.ConfigureAssets();
-            
+
             app.ConfigureSwagger(Assembly.GetExecutingAssembly());
 
             app.ConfigureCompression();

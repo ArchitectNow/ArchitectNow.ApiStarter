@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Services;
 using Autofac;
-using Xunit;
 using FluentAssertions;
+using Xunit;
 
 namespace ArchitectNow.ApiStarter.Tests.ServiceTests
 {

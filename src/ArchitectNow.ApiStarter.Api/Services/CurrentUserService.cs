@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ArchitectNow.ApiStarter.Api.Services
 {
-    class CurrentUserService: ICurrentUserService
+    internal class CurrentUserService : ICurrentUserService
     {
         private readonly IHttpContextAccessor _contextAccessor;
 

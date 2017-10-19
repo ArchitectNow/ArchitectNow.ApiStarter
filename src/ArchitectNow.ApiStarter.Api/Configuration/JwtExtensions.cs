@@ -58,7 +58,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     };
                 });
         }
-        
+
         public static void ConfigureJwt(this IApplicationBuilder app)
         {
             app.UseAuthentication();

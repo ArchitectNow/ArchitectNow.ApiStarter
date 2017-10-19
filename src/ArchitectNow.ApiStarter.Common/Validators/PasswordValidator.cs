@@ -4,7 +4,7 @@ using FluentValidation.Validators;
 
 namespace ArchitectNow.ApiStarter.Common.Validators
 {
-    public class PasswordValidator:  PropertyValidator, IRegularExpressionValidator
+    public class PasswordValidator : PropertyValidator, IRegularExpressionValidator
     {
         private readonly Regex _regex;
 
@@ -14,11 +14,11 @@ namespace ArchitectNow.ApiStarter.Common.Validators
             _regex = new Regex(Expression);
         }
 
+        public string Expression { get; } = "^[0-9]{6}$";
+
         protected override bool IsValid(PropertyValidatorContext context)
         {
             return context.PropertyValue == null || _regex.IsMatch((string) context.PropertyValue);
         }
-
-        public string Expression { get; } = "^[0-9]{6}$";
     }
 }

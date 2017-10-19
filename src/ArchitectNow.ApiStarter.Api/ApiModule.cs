@@ -26,14 +26,14 @@ namespace ArchitectNow.ApiStarter.Api
 
                 return key;
             }).As<SecurityKey>().SingleInstance();
-            
+
             builder.Register(context =>
             {
                 var key = context.Resolve<SecurityKey>();
 
                 return new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
             }).As<SigningCredentials>().SingleInstance();
-            
+
             builder.Register(context =>
             {
                 var configurationRoot = context.Resolve<IConfiguration>();
@@ -45,7 +45,7 @@ namespace ArchitectNow.ApiStarter.Api
                 return new OptionsWrapper<JwtIssuerOptions>(issuerOptions);
             }).As<IOptions<JwtIssuerOptions>>().InstancePerLifetimeScope();
         }
-        
+
         protected virtual SecurityKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
         {
             //this would be more secure, value pulled from KeyVault

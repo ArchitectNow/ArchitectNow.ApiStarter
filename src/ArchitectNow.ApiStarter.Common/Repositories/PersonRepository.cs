@@ -34,7 +34,7 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
                 Builders<Person>.IndexKeys.Ascending(l => l.NameLast),
                 new CreateIndexOptions {Name = "person_nameLast"});
         }
-        
+
         public async Task<List<Person>> Search(string searchString)
         {
             if (string.IsNullOrEmpty(searchString))
@@ -47,7 +47,7 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
             {
                 var results = await FindAsync(x => x.IsActive && x.NameFirst.Contains(searchString));
 
-                return results.ToList(); 
+                return results.ToList();
             }
         }
     }

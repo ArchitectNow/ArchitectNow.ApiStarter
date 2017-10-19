@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace ArchitectNow.ApiStarter.Api.Models.Validation
 {
-    class PersonValidator: AbstractValidator<UserVm>
+    internal class PersonValidator : AbstractValidator<UserVm>
     {
         public PersonValidator()
         {

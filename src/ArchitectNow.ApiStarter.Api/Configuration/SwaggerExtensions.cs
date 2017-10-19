@@ -17,12 +17,13 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 Title = "ArchitectNow.ApiStarter",
                 SwaggerRoute = "/api/docs/v1/swagger.json",
                 SwaggerUiRoute = "/api/docs",
-                UseJsonEditor = true,  //Set to false if you want to manually type in the Json
+                UseJsonEditor = true, //Set to false if you want to manually type in the Json
                 FlattenInheritanceHierarchy = true,
                 IsAspNetCore = true
             };
 
-            swaggerUiOwinSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
+            swaggerUiOwinSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization",
+                new SwaggerSecurityScheme
                 {
                     Type = SwaggerSecuritySchemeType.ApiKey,
                     Name = "Authorization",

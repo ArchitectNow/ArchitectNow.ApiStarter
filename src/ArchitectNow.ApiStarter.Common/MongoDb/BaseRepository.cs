@@ -22,14 +22,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         private MongoClient _client;
         private IMongoCollection<TModel> _collection;
         private string _databaseName;
-        
-        protected ICacheService CacheService { get; }
-        protected IDataContext CurrentContext { get; }
-        protected ILogger<TModel> Logger { get; }
 
-        public IMongoDatabase Database => _client.GetDatabase(_databaseName);
-        public abstract string CollectionName { get; }
-        
         protected BaseRepository(ILogger<TModel> logger,
             IDataContext dataContext, ICacheService cacheService,
             IOptions<MongoOptions> options,
@@ -44,6 +37,12 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
             InitClient();
         }
+
+        protected ICacheService CacheService { get; }
+        protected IDataContext CurrentContext { get; }
+        protected ILogger<TModel> Logger { get; }
+
+        public IMongoDatabase Database => _client.GetDatabase(_databaseName);
 
         /// <summary>
         ///     Gets the data query.
@@ -61,6 +60,8 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
                 return _collection.AsQueryable();
             }
         }
+
+        public abstract string CollectionName { get; }
 
 
         /// <summary>

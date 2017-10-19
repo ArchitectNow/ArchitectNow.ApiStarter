@@ -94,7 +94,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
                                       new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero))
                 .TotalSeconds);
         }
-        
+
         private async Task<TokenVm> GenerateTokenRequest(User user, ClaimsIdentity identity)
         {
             var claims = new List<Claim>

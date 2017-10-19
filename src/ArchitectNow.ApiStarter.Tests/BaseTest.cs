@@ -15,11 +15,12 @@ namespace ArchitectNow.ApiStarter.Tests
 {
     public abstract class BaseTest
     {
-        protected ILifetimeScope Scope { get; private set; }
         protected BaseTest()
         {
             Initialize();
         }
+
+        protected ILifetimeScope Scope { get; private set; }
 
         private void Initialize()
         {
@@ -30,7 +31,7 @@ namespace ArchitectNow.ApiStarter.Tests
         protected IConfiguration BuildConfiguration()
         {
             var builder = new ConfigurationBuilder();
-                
+
             var path = Path.GetFullPath(@"../../..");
 
             builder.SetBasePath(path).AddJsonFile("testsettings.json");
@@ -45,7 +46,7 @@ namespace ArchitectNow.ApiStarter.Tests
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddLogging();
             ConfigureLogger(serviceCollection);
-            
+
             var modules = new Module[]
             {
                 new CommonModule(),
@@ -70,7 +71,7 @@ namespace ArchitectNow.ApiStarter.Tests
                 .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
                 .WriteTo.ColoredConsole()
                 .CreateLogger();
-            
+
             collection.AddSingleton((ILoggerFactory) new SerilogLoggerFactory(Log.Logger));
         }
     }

@@ -4,7 +4,7 @@ using FluentValidation;
 
 namespace ArchitectNow.ApiStarter.Common.Models.Validation
 {
-    class RegistrationValidator : AbstractValidator<RegistrationVm>
+    internal class RegistrationValidator : AbstractValidator<RegistrationVm>
     {
         public RegistrationValidator()
         {
@@ -12,7 +12,6 @@ namespace ArchitectNow.ApiStarter.Common.Models.Validation
             RuleFor(vm => vm.NameFirst).Length(3);
             RuleFor(vm => vm.NameLast).Length(3);
             RuleFor(vm => vm.Password).Password().WithMessage("Password must be 4 numbers only");
-            
-        }   
+        }
     }
 }

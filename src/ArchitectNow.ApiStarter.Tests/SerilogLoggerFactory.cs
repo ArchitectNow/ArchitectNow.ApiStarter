@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Serilog.Debugging;
 using Serilog.Extensions.Logging;
+using ILogger = Serilog.ILogger;
 
 namespace ArchitectNow.ApiStarter.Tests
 {
@@ -8,7 +9,7 @@ namespace ArchitectNow.ApiStarter.Tests
     {
         private readonly SerilogLoggerProvider _provider;
 
-        public SerilogLoggerFactory(Serilog.ILogger logger = null, bool dispose = false)
+        public SerilogLoggerFactory(ILogger logger = null, bool dispose = false)
         {
             _provider = new SerilogLoggerProvider(logger, dispose);
         }
@@ -18,7 +19,7 @@ namespace ArchitectNow.ApiStarter.Tests
             _provider.Dispose();
         }
 
-        public ILogger CreateLogger(string categoryName)
+        public Microsoft.Extensions.Logging.ILogger CreateLogger(string categoryName)
         {
             return _provider.CreateLogger(categoryName);
         }

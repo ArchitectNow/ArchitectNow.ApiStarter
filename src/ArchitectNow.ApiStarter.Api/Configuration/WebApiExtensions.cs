@@ -25,10 +25,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     var policy = new AuthorizationPolicyBuilder()
                         .RequireAuthenticatedUser()
                         .Build();
-                    
+
                     o.Filters.Add(new AuthorizeFilter(policy));
-                    
-                    
                 })
                 .AddJsonOptions(options =>
                 {
