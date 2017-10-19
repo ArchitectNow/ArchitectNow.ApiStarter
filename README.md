@@ -16,4 +16,6 @@ Repository layer is set up for MongoDb (https://www.mongodb.com/) and utilizes t
 
 All libraries are NetCore or NetStandard 2.0 compliant and all original development was done on MacBook Pro's using Rider by Jetbrains (https://www.jetbrains.com/rider/)
 
+If there are any questions regarding this setup please don't hesitate to reach out at kvgros@architectnow.net.   If you are interested in any of ArchitectNow's workshops check out our website at www.architectnow.net/workshops.  
+
 
