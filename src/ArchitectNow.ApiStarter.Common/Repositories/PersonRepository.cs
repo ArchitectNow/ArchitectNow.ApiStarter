@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.MongoDb;
@@ -31,6 +33,22 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
             await collection.Indexes.CreateOneAsync(
                 Builders<Person>.IndexKeys.Ascending(l => l.NameLast),
                 new CreateIndexOptions {Name = "person_nameLast"});
+        }
+        
+        public async Task<List<Person>> Search(string searchString)
+        {
+            if (string.IsNullOrEmpty(searchString))
+            {
+                var results = await FindAsync(x => x.IsActive);
+
+                return results.ToList();
+            }
+            else
+            {
+                var results = await FindAsync(x => x.IsActive && x.NameFirst.Contains(searchString));
+
+                return results.ToList(); 
+            }
         }
     }
 }
