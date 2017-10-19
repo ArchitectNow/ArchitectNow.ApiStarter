@@ -11,6 +11,7 @@ The technology platform utilizes:
 * FluentValidation - https://github.com/JeremySkinner/FluentValidation
 * Serilog - https://serilog.net/
 * NSwag for ASP.NET Core  - https://github.com/RSuter/NSwag (for Swagger integration and NSwag support)
+* xUnit for the unit test harness - https://xunit.github.io/ 
 
 Repository layer is set up for MongoDb (https://www.mongodb.com/) and utilizes the MongoDB.Driver library for .NET (https://docs.mongodb.com/ecosystem/drivers/csharp/)
 
