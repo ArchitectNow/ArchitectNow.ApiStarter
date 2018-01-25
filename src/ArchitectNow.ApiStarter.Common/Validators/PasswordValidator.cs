@@ -9,7 +9,7 @@ namespace ArchitectNow.ApiStarter.Common.Validators
         private readonly Regex _regex;
 
         public PasswordValidator()
-            : base(new LanguageStringSource(nameof(EmailValidator)))
+            : base(new LanguageStringSource(nameof(PasswordValidator)))
         {
             _regex = new Regex(Expression);
         }

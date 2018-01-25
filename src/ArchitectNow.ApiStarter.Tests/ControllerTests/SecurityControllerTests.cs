@@ -12,7 +12,7 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
         {
             var loginParams = new LoginVm
             {
-                Email = "dummy",
+                Email = "kvgros@architectnow.net",
                 Password = "asdfad"
             };
 

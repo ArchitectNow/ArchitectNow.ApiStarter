@@ -9,6 +9,9 @@ namespace ArchitectNow.ApiStarter.Api.Models.Mappings
         public UserProfile()
         {
             CreateMap<User, UserVm>().ReverseMap();
+
+            //Mapper.CreateMap<Src, Dest>()
+            //    .ForMember(d => d.UserName, opt => opt.MapFrom(/* ????? */));
         }
     }
 }

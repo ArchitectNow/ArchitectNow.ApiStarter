@@ -9,9 +9,10 @@ namespace ArchitectNow.ApiStarter.Common.Models.Validation
         public RegistrationValidator()
         {
             RuleFor(vm => vm.Email).NotEmpty().EmailAddress();
-            RuleFor(vm => vm.NameFirst).Length(3);
-            RuleFor(vm => vm.NameLast).Length(3);
+            RuleFor(vm => vm.NameFirst).MinimumLength(3);
+            RuleFor(vm => vm.NameLast).MinimumLength(3);
             RuleFor(vm => vm.Password).Password().WithMessage("Password must be 4 numbers only");
+
         }
     }
 }

@@ -17,6 +17,12 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddRouting(options => options.LowercaseUrls = true);
 
+            services.AddCors((options => options.AddPolicy("AllowAllOrigins",
+                builder =>
+                {
+                    builder.AllowAnyOrigin();
+                })));
+
             services.AddMvc(o =>
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
@@ -49,6 +55,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             app.UseFileServer();
 
             app.UseStaticFiles();
+
+            app.UseCors("AllowAllOrigins");
         }
     }
 }

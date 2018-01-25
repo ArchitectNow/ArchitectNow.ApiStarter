@@ -1,4 +1,5 @@
-﻿using ArchitectNow.ApiStarter.Common.Models;
+﻿using ArchitectNow.ApiStarter.Api.Models.ViewModels;
+using ArchitectNow.ApiStarter.Common.Models;
 using AutoMapper;
 
 namespace ArchitectNow.ApiStarter.Api.Models.Mappings
@@ -7,7 +8,7 @@ namespace ArchitectNow.ApiStarter.Api.Models.Mappings
     {
         public PersonProfile()
         {
-            CreateMap<Person, PersonProfile>().ReverseMap();
+            CreateMap<Person, PersonVm>().ReverseMap();
         }
     }
 }
