@@ -26,6 +26,8 @@ namespace ArchitectNow.ApiStarter.Tests
         {
             var buildConfiguration = BuildConfiguration();
             Scope = BuildContainer(buildConfiguration);
+            
+
         }
 
         protected IConfiguration BuildConfiguration()

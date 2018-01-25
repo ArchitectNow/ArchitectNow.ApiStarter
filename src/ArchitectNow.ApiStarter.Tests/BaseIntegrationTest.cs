@@ -4,6 +4,8 @@ using ArchitectNow.ApiStarter.Api;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
+using Serilog;
+using Serilog.Events;
 
 namespace ArchitectNow.ApiStarter.Tests
 {
@@ -11,8 +13,16 @@ namespace ArchitectNow.ApiStarter.Tests
     {
         public BaseIntegrationTest()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.ColoredConsole()
+                .CreateLogger();
+            
             var builder = new WebHostBuilder()
                 .UseStartup<Startup>()
+                .UseSerilog(Log.Logger)
                 .UseConfiguration(BuildConfiguration());
 
             TestServer = new TestServer(builder);

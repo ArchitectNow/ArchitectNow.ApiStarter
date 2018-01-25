@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using NJsonSchema;
 using NSwag;
 using NSwag.AspNetCore;
-using NSwag.SwaggerGeneration.WebApi.Processors.Security;
+using NSwag.SwaggerGeneration.Processors.Security;
 
 namespace ArchitectNow.ApiStarter.Api.Configuration
 {
