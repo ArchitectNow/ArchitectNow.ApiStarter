@@ -11,27 +11,25 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
     {
         public static void ConfigureSwagger(this IApplicationBuilder app, Assembly assembly)
         {
-            var swaggerUiOwinSettings = new SwaggerUiSettings
+            app.UseSwaggerUi3(assembly, settings =>
             {
-                DefaultPropertyNameHandling = PropertyNameHandling.CamelCase,
-                Title = "ArchitectNow.ApiStarter",
-                SwaggerRoute = "/api/docs/v1/swagger.json",
-                SwaggerUiRoute = "/api/docs",
-                UseJsonEditor = true, //Set to false if you want to manually type in the Json
-                FlattenInheritanceHierarchy = true,
-                IsAspNetCore = true
-            };
+                settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
+                settings.GeneratorSettings.Title = "ArchitectNow.ApiStarter";
+                settings.GeneratorSettings.FlattenInheritanceHierarchy = true;
+                settings.GeneratorSettings.IsAspNetCore = true;
+                settings.GeneratorSettings.DocumentProcessors.Add(
+                    new SecurityDefinitionAppender("Authorization",
+                        new SwaggerSecurityScheme
+                        {
+                            Type = SwaggerSecuritySchemeType.ApiKey,
+                            Name = "Authorization",
+                            In = SwaggerSecurityApiKeyLocation.Header
+                        })
+                );
 
-            swaggerUiOwinSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization",
-                new SwaggerSecurityScheme
-                {
-                    Type = SwaggerSecuritySchemeType.ApiKey,
-                    Name = "Authorization",
-                    In = SwaggerSecurityApiKeyLocation.Header
-                })
-            );
-
-            app.UseSwaggerUi(assembly, swaggerUiOwinSettings);
+                settings.SwaggerRoute = "/api/docs/v1/swagger.json";
+                settings.SwaggerUiRoute = "/api/docs";
+            });
         }
     }
 }
