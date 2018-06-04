@@ -8,8 +8,8 @@ namespace ArchitectNow.ApiStarter.Api.Models.Validation
         public PersonValidator()
         {
             RuleFor(vm => vm.Email).NotEmpty().EmailAddress();
-            RuleFor(vm => vm.NameFirst).Length(3);
-            RuleFor(vm => vm.NameLast).Length(3);
+            RuleFor(vm => vm.NameFirst).MinimumLength(3);
+            RuleFor(vm => vm.NameLast).MinimumLength(3);
         }
     }
 }
