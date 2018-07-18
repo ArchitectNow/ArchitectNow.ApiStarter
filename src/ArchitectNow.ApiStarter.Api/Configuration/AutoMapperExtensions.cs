@@ -10,7 +10,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         public static void ConfigureAutomapper(this IServiceCollection services,
             Action<IMapperConfigurationExpression> action)
         {
-            services.AddAutoMapper(action, DependencyContext.Default);
+            services.AddAutoMapper(action);
         }
     }
 }

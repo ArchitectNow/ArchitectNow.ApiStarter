@@ -1,36 +1,37 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace ArchitectNow.ApiStarter.Api
 {
     public class Program
     {
-        public static int Main(string[] args)
+        private static IConfiguration _configuration;
+
+        public static async Task<int> Main(string[] args)
         {
-            var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            var logPath = Path.Combine(baseDir, "logs");
-            if (!Directory.Exists(logPath))
-                Directory.CreateDirectory(logPath);
-
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                .WriteTo
-                .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
-                .WriteTo.ColoredConsole()
-                .CreateLogger();
-
             try
             {
-                BuildWebHost(args)
-                    .Run();
+                _configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", false, true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+                    .AddEnvironmentVariables()
+                    .AddCommandLine(args)
+                    .Build();
+                
+                Log.Logger = _configuration.ConfigureLogging().CreateLogger();
+                var host = BuildWebHost(args);
+
+                //initialization
+                await host.RunAsync();
                 return 0;
             }
             catch (Exception exception)
@@ -46,20 +47,36 @@ namespace ArchitectNow.ApiStarter.Api
 
         private static IWebHost BuildWebHost(string[] args)
         {
-            //pulls in environment from cli args or env vars
-            var builder = new ConfigurationBuilder()
-                .AddEnvironmentVariables()
-                .AddCommandLine(args);
+            var builder = WebHost.CreateDefaultBuilder(args)
+                .UseConfiguration(_configuration)
+                .UseSerilog()
+                .UseStartup<Startup>();
 
-            var configuration = builder.Build();
+            return builder.Build();
+        }
+    }
 
-            //https://github.com/aspnet/MetaPackages/blob/633cb681493c0958a9d215624c173db29e20c23d/src/Microsoft.AspNetCore/WebHost.cs
+    public static class LoggingExtensions
+    {
+        public static LoggerConfiguration ConfigureLogging(this IConfiguration configuration, LoggerConfiguration loggerConfiguration = null)
+        {
+            var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            var logPath = Path.Combine(baseDir ?? string.Empty, "logs");
+            if (!Directory.Exists(logPath))
+            {
+                Directory.CreateDirectory(logPath);
+            }
 
-            return WebHost.CreateDefaultBuilder(args)
-                .UseConfiguration(configuration)
-                .UseStartup<Startup>()
-                .UseSerilog(Log.Logger)
-                .Build();
+            var loggingConfiguration = loggerConfiguration ?? new LoggerConfiguration()
+                                           .ReadFrom.Configuration(configuration)
+                                           .WriteTo
+                                           .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10, shared: true)
+                                           .WriteTo.Console(theme: AnsiConsoleTheme.Code);
+
+          
+            Log.Write(LogEventLevel.Information, "Logging has started");
+
+            return loggingConfiguration;
         }
     }
 }
