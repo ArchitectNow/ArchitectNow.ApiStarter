@@ -1,7 +1,6 @@
 ﻿using System;
 using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyModel;
 
 namespace ArchitectNow.ApiStarter.Api.Configuration
 {

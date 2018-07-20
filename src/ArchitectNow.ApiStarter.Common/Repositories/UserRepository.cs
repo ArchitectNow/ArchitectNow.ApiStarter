@@ -27,10 +27,10 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
             await base.ConfigureIndexes();
 
             var collection = GetCollection();
-
-            await collection.Indexes.CreateOneAsync(
+            var model = new CreateIndexModel<User>(
                 Builders<User>.IndexKeys.Ascending(l => l.Email),
                 new CreateIndexOptions {Name = "user_email"});
+            await collection.Indexes.CreateOneAsync(model);
         }
 
         public async Task<User> GetByEmail(string email)

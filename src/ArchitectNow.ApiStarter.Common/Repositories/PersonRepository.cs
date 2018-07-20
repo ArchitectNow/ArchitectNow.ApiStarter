@@ -31,8 +31,9 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
             var collection = GetCollection();
 
             await collection.Indexes.CreateOneAsync(
+                new CreateIndexModel<Person>(
                 Builders<Person>.IndexKeys.Ascending(l => l.NameLast),
-                new CreateIndexOptions {Name = "person_nameLast"});
+                new CreateIndexOptions {Name = "person_nameLast"}));
         }
 
         public async Task<List<Person>> Search(string searchString)

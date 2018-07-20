@@ -41,11 +41,11 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         [HttpGet("search/{Id}")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
-        public async Task<IActionResult> Search([FromRoute] string Id, [FromQuery] string SearchParams = "")
+        public async Task<IActionResult> Search([FromRoute] string id, [FromQuery] string searchParams = "")
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
-                var people = await _personRepository.Search(SearchParams);
+                var people = await _personRepository.Search(searchParams);
 
                 return people.Select(x => Mapper.Map<PersonVm>(x));
             });

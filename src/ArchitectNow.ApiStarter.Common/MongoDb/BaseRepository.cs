@@ -248,7 +248,8 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
                 Name = name
             };
 
-            await GetCollection().Indexes.CreateOneAsync(keys, options);
+            var model = new CreateIndexModel<TModel>(keys, options);
+            await GetCollection().Indexes.CreateOneAsync(model);
         }
 
         /// <summary>
@@ -265,7 +266,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         protected virtual async Task<long> CountAsync(Expression<Func<TModel, bool>> filter)
         {
-            return await GetCollection().CountAsync(filter);
+            return await GetCollection().CountDocumentsAsync(filter);
         }
 
         protected async Task<List<TModel>> FindAsync(Expression<Func<TModel, bool>> filter)
