@@ -27,8 +27,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                         })
                 );
 
-                settings.SwaggerRoute = "/api/docs/v1/swagger.json";
-                settings.SwaggerUiRoute = "/api/docs";
+//                settings.SwaggerRoute = "/api/docs/v1/swagger.json";
+//                settings.SwaggerUiRoute = "/api/docs";
             });
         }
     }
