@@ -7,6 +7,7 @@ using ArchitectNow.ApiStarter.Api.Models.Validation;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Api.Services;
 using ArchitectNow.ApiStarter.Api.Models;
+using ArchitectNow.ApiStarter.Common;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
 using Autofac;
@@ -73,8 +74,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.AddOpenApiDocument(settings =>
             {
-                
-                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.Title = "ArchitectNow API Workshop";
                 settings.Description = "ASPNETCore API built as a demonstration during workshop";
 
@@ -98,7 +97,7 @@ namespace ArchitectNow.ApiStarter.Api
                 {
                     expression.ConstructServicesUsing(type => _applicationContainer.Resolve(type));
                 });
-            });
+            }, new CommonModule());
 
             // Create the IServiceProvider based on the container.
             var provider = new AutofacServiceProvider(_applicationContainer);
@@ -107,7 +106,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             return provider;
         }
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
@@ -145,6 +143,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Path = "/docs";
                 settings.DocumentPath = "/docs/swagger.json";                
             });
+            
             builder.Use(async (context, next) =>
             {
                 LogContext.PushProperty("Environment", _hostingEnvironment.EnvironmentName);
