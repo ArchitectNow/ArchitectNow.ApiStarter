@@ -20,6 +20,7 @@ using NSwag.Annotations;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
+    [ApiVersion("2.0")]
     public class SecurityController : ApiV1BaseController
     {
         private readonly JwtIssuerOptions _jwtOptions;

@@ -22,6 +22,8 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NSwag.AspNetCore;
+using NSwag.SwaggerGeneration.Processors;
 using Serilog;
 using Serilog.Context;
 
@@ -49,8 +51,41 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.AddOptions();
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
-
+            
+            services.AddSwaggerDocument();
+            
+//            services.AddOpenApiDocument(settings =>
+//            {
+//                settings.Title = "ArchitectNow API Workshop";
+//                settings.Description = "ASPNETCore API built as a demonstration during workshop";
+//
+//                settings.SerializerSettings = new JsonSerializerSettings
+//                {
+//                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+//                    Converters = {new StringEnumConverter()}
+//                };
+//
+//                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+//                settings.DocumentName = "v1";
+//            });
+            
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
+            
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "ArchitectNow API Workshop";
+                settings.Description = "ASPNETCore API built as a demonstration during workshop";
+
+                settings.SerializerSettings = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Converters = {new StringEnumConverter()}
+                };
+
+                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                settings.DocumentName = "1.0";
+     
+            });
 
             services.AddAuthorization(options =>
             {
@@ -65,20 +100,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
             services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
-
-            services.AddOpenApiDocument(settings =>
-            {
-                settings.Title = "ArchitectNow API Workshop";
-                settings.Description = "ASPNETCore API built as a demonstration during workshop";
-
-                settings.SerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    Converters = {new StringEnumConverter()}
-                };
-
-                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            });
 
             services.AddCors();
 
@@ -123,13 +144,18 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseResponseCompression();
 
-            builder.UseSwagger(settings => { settings.Path = "/docs/swagger.json"; });
+            builder.UseApiVersioning();
+
+            builder.UseSwagger(settings =>
+            {
+                settings.Path = "/docs/{documentName}/swagger.json";
+            });
 
             builder.UseSwaggerUi3(settings =>
             {
-                settings.EnableTryItOut = true;
                 settings.Path = "/docs";
-                settings.DocumentPath = "/docs/swagger.json";
+                settings.DocumentPath = "/docs/{documentName}/swagger.json";
+                settings.EnableTryItOut = true;
             });
 
             builder.Use(async (context, next) =>
