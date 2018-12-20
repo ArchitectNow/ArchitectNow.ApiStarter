@@ -14,9 +14,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
-namespace ArchitectNow.ApiStarter.Api.Controllers.V1
+namespace ArchitectNow.ApiStarter.Api.Controllers.V2
 {
-    public class PersonController : ApiV1BaseController
+    public class PersonController : ApiV2BaseController
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IPersonRepository _personRepository;

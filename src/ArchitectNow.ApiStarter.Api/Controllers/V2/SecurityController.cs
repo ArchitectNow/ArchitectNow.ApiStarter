@@ -18,9 +18,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NSwag.Annotations;
 
-namespace ArchitectNow.ApiStarter.Api.Controllers.V1
+namespace ArchitectNow.ApiStarter.Api.Controllers.V2
 {
-    public class SecurityController : ApiV1BaseController
+    public class SecurityController : ApiV2BaseController
     {
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly ISecurityService _securityService;

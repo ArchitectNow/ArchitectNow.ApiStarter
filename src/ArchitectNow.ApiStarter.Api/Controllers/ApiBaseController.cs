@@ -18,14 +18,14 @@ namespace ArchitectNow.ApiStarter.Api.Controllers
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     public abstract class ApiBaseController : Controller
     {
-        protected IMapper Mapper { get; }
-        protected IServiceInvoker ServiceInvoker { get; }
-        
         protected ApiBaseController(IMapper mapper, IServiceInvoker serviceInvoker)
         {
             Mapper = mapper;
             ServiceInvoker = serviceInvoker;
         }
+
+        protected IMapper Mapper { get; }
+        protected IServiceInvoker ServiceInvoker { get; }
 
         public override void OnActionExecuting(ActionExecutingContext context)
         {

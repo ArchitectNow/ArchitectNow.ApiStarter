@@ -4,7 +4,6 @@
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Controllers\V2" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
