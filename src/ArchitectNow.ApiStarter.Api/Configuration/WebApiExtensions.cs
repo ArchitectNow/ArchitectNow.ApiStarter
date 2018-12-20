@@ -33,7 +33,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                     settings.ContractResolver = camelCasePropertyNamesContractResolver;
                     settings.Converters.Add(new IsoDateTimeConverter());
-                    settings.Converters.Add(new StringEnumConverter(true));
+                    settings.Converters.Add(new StringEnumConverter(new DefaultNamingStrategy()));
 					
                     configureJson?.Invoke(options);
                 });

@@ -20,6 +20,9 @@ using Microsoft.AspNetCore.Routing.Tree;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using Serilog;
 using Serilog.Context;
@@ -72,11 +75,15 @@ namespace ArchitectNow.ApiStarter.Api
             {
                 
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                settings.Title = "Area Standards API";
-                settings.Description = "Area Standards API";
-                
-                settings.DefaultEnumHandling = EnumHandling.String;
-                settings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
+                settings.Title = "ArchitectNow API Workshop";
+                settings.Description = "ASPNETCore API built as a demonstration during workshop";
+
+                settings.SerializerSettings = new JsonSerializerSettings()
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Converters = {new StringEnumConverter()}
+                };
+       
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
             });
             
