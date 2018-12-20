@@ -1,122 +1,191 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
+using ArchitectNow.ApiStarter.Api.Models.Validation;
 using ArchitectNow.ApiStarter.Api.Configuration;
-using ArchitectNow.ApiStarter.Common;
+using ArchitectNow.ApiStarter.Api.Services;
+using ArchitectNow.ApiStarter.Api.Models;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
-using ArchitectNow.ApiStarter.Common.MongoDb;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using AutofacSerilogIntegration;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Routing.Tree;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
+using NJsonSchema;
+using Serilog;
+using Serilog.Context;
 
 namespace ArchitectNow.ApiStarter.Api
 {
     public class Startup
     {
-        private readonly IConfiguration _configuration;
         private readonly ILogger<Startup> _logger;
+        private readonly IConfiguration _configuration;
+        private readonly IHostingEnvironment _hostingEnvironment;
+        private IContainer _applicationContainer;
 
-        public Startup(IConfiguration configuration, ILogger<Startup> logger, IHostingEnvironment hostingEnvironment)
+        public Startup(ILogger<Startup> logger, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
-            _configuration = configuration;
             _logger = logger;
-
-            logger.LogInformation($"Constructing for environment: {hostingEnvironment.EnvironmentName}");
+            _configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
-
-        protected IContainer ApplicationContainer { get; private set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public IServiceProvider ConfigureServices(IServiceCollection services)
+       public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            _logger.LogInformation("Starting: Configure Services");
-
-            services.ConfigureLogging();
+            _logger.LogInformation($"{nameof(ConfigureServices)} starting...");
 
             services.AddOptions();
-
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
-            services.ConfigureAutomapper(config => { });
+            services.ConfigureApi(new FluentValidationOptions {Enabled = false});
 
-            services.ConfigureApi();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("Default", builder => builder.RequireAuthenticatedUser().Build());
+            });
 
-            services.ConfigureCompression();
+            if (!_hostingEnvironment.IsDevelopment())
+            {
+                var key = _configuration["ApplicationInsights:InstrumentationKey"];
+                services.AddApplicationInsightsTelemetry(key);
+            }
 
-            services.AddMemoryCache();
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+            });
 
-            ApplicationContainer =
-                services.ConfigureAutofacContainer(_configuration, b => { }, new CommonModule(), new ApiModule());
+            services.AddOpenApiDocument(settings =>
+            {
+                
+                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                settings.Title = "Area Standards API";
+                settings.Description = "Area Standards API";
+                
+                settings.DefaultEnumHandling = EnumHandling.String;
+                settings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
+                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+            });
+            
+            services.AddCors();
 
-            var provider = new AutofacServiceProvider(ApplicationContainer);
+            //last
+            _applicationContainer = services.CreateAutofacContainer((builder, serviceCollection) =>
+            {
+                builder.RegisterLogger();
 
-            ConfigureMongoIndexes();
+                serviceCollection.AddAutoMapper(expression =>
+                {
+                    expression.ConstructServicesUsing(type => _applicationContainer.Resolve(type));
+                });
+            });
 
-            _logger.LogInformation("Completing: Configure Services");
+            // Create the IServiceProvider based on the container.
+            var provider = new AutofacServiceProvider(_applicationContainer);
+
+            _logger.LogInformation($"{nameof(ConfigureServices)} complete...");
 
             return provider;
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IConfiguration configuration,
-            ILoggerFactory loggerFactory, IApplicationLifetime appLifetime)
+        public void Configure(
+            IApplicationBuilder builder,
+            IApplicationLifetime appLifetime,
+            IConfiguration configuration)
         {
-            _logger.LogInformation("Starting: Configure");
+            var logger = builder.ApplicationServices.GetService<ILogger<Startup>>();
+            logger.LogInformation($"{nameof(Configure)} starting...");
 
-            env.ConfigureLogger(loggerFactory, configuration);
+            builder.UseFileServer();
 
-            app.ConfigureJwt();
+            var uploadsPath = configuration["uploadsPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+            if (!Directory.Exists(uploadsPath))
+            {
+                Directory.CreateDirectory(uploadsPath);
+            }
 
-            app.ConfigureAssets();
+            builder.UseStaticFiles();
 
-            app.ConfigureSwagger(Assembly.GetExecutingAssembly());
+            builder.UseCors(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
-            app.ConfigureCompression();
+            builder.UseAuthentication();
 
-            app.ConfigureAssets();
+            builder.UseResponseCompression();
+            
+            builder.UseSwagger(settings =>
+            {
+                settings.Path = "/docs/swagger.json";
+            });
 
-            app.UseMvc();
+            builder.UseSwaggerUi3(settings =>
+            {
+                settings.EnableTryItOut = true;
+                settings.Path = "/docs";
+                settings.DocumentPath = "/docs/swagger.json";                
+            });
+            builder.Use(async (context, next) =>
+            {
+                LogContext.PushProperty("Environment", _hostingEnvironment.EnvironmentName);
+                if (context.User.Identity.IsAuthenticated)
+                {
+                    var userInformation = context.User.GetUserInformation();
+                    using (LogContext.PushProperty("User", userInformation))
+                    {
+                        await next.Invoke();
+                    }
+                }
+                else
+                {
+                    using (LogContext.PushProperty("User", "anonymous"))
+                    {
+                        await next.Invoke();
+                    }
+                }
+            });
 
-            _logger.LogInformation("Completing: Configure");
-        }
+            builder.UseMvc();
 
-        protected virtual SecurityKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
-        {
-            //this would be more secure, value pulled from KeyVault
-            var keyString = issuerOptions.Audience;
-            var keyBytes = Encoding.UTF8.GetBytes(keyString);
-            var signingKey = new JwtSigningKey(keyBytes);
-            return signingKey;
-        }
-
-        private void ConfigureMongoIndexes()
-        {
-            _logger.LogInformation("Starting: Creating Mongo Indexes");
+            appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 
             try
             {
-                var baseRepositories = ApplicationContainer.Resolve<IEnumerable<IBaseRepository>>();
-                foreach (var baseRepository in baseRepositories)
-                    Task.Run(async () => await baseRepository.ConfigureIndexes());
+                _applicationContainer.Resolve<IMapper>().ConfigurationProvider.AssertConfigurationIsValid();
             }
-            catch (Exception exception)
+            catch (AutoMapperConfigurationException exception)
             {
-                _logger.LogWarning(exception, "Could not create index");
+                if (_hostingEnvironment.IsDevelopment())
+                {
+                    logger.LogError(exception.Message);
+                    throw;
+                }
+
+                logger.LogWarning(exception.Message);
             }
-            finally
-            {
-                _logger.LogInformation("Completing: Creating Mongo Indexes");
-            }
+
+            logger.LogInformation($"{nameof(Configure)} complete...");
+        }
+
+        private JwtSigningKey ConfigureSecurityKey(JwtIssuerOptions issuerOptions)
+        {
+            var keyString = issuerOptions.Audience;
+            var keyBytes = Encoding.Unicode.GetBytes(keyString);
+            var signingKey = new JwtSigningKey(keyBytes);
+            return signingKey;
         }
     }
 }

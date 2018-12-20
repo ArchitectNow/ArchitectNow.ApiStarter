@@ -15,6 +15,7 @@ namespace ArchitectNow.ApiStarter.Api.Filters
 
         public void Dispose()
         {
+
         }
 
         public void OnException(ExceptionContext context)

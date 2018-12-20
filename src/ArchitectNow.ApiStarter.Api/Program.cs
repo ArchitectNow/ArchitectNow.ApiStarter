@@ -10,6 +10,7 @@ namespace ArchitectNow.ApiStarter.Api
 {
     public class Program
     {
+
         private static IConfiguration _configuration;
 
         public static async Task<int> Main(string[] args)

@@ -15,10 +15,7 @@ namespace ArchitectNow.ApiStarter.Api.Services
         Task<IActionResult> AsyncOkAccepted<TResult>(string location, Func<Task<TResult>> serviceCall);
         Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode, Func<Task<TResult>> serviceCall);
         Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode, Func<Task> serviceCall);
-
-        Task<IActionResult> AsyncResult<TResult>(Func<Task<TResult>> serviceCall,
-            Func<TResult, ActionResult> createResult);
-
-        Task<IActionResult> AsyncResult(Func<Task> serviceCall, Func<ActionResult> createResult);
+        Task<IActionResult> AsyncResult<TResult>(Func<Task<TResult>> serviceCall, Func<TResult, ActionResult> createResult );
+        Task<IActionResult> AsyncResult(Func<Task> serviceCall, Func<ActionResult> createResult );
     }
 }

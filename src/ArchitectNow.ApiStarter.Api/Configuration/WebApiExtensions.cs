@@ -1,10 +1,9 @@
-﻿using ArchitectNow.ApiStarter.Api.Filters;
+﻿using System;
+using ArchitectNow.ApiStarter.Api.Filters;
+using ArchitectNow.ApiStarter.Api.Models.Validation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -12,27 +11,19 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 {
     public static class WebApiExtensions
     {
-        public static void ConfigureApi(this IServiceCollection services)
+        public static void ConfigureApi(this IServiceCollection services, FluentValidationOptions fluentValidationOptions, Action<MvcOptions> configureMvc = null, Action<MvcJsonOptions> configureJson = null)
         {
+            /*************************
+             * IConfiguration is not available yet
+             *************************/
+
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
             services.AddRouting(options => options.LowercaseUrls = true);
-
-            services.AddCors((options => options.AddPolicy("AllowAllOrigins",
-                builder =>
-                {
-                    builder.AllowAnyOrigin();
-                })));
-
-            services.AddMvc(o =>
+            var mvcBuilder = services.AddMvc(o =>
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
                     o.ModelValidatorProviders.Clear();
-
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-
-                    o.Filters.Add(new AuthorizeFilter(policy));
+                    configureMvc?.Invoke(o);
                 })
                 .AddJsonOptions(options =>
                 {
@@ -41,22 +32,17 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     var camelCasePropertyNamesContractResolver = new CamelCasePropertyNamesContractResolver();
 
                     settings.ContractResolver = camelCasePropertyNamesContractResolver;
-                    settings.Converters = new JsonConverter[]
-                    {
-                        new IsoDateTimeConverter(),
-                        new StringEnumConverter(true)
-                    };
-                })
-                .AddFluentValidation();
-        }
+                    settings.Converters.Add(new IsoDateTimeConverter());
+                    settings.Converters.Add(new StringEnumConverter(true));
+					
+                    configureJson?.Invoke(options);
+                });
 
-        public static void ConfigureAssets(this IApplicationBuilder app)
-        {
-            app.UseFileServer();
 
-            app.UseStaticFiles();
-
-            app.UseCors("AllowAllOrigins");
+            if (fluentValidationOptions.Enabled)
+            {
+                mvcBuilder.AddFluentValidation(configuration => fluentValidationOptions.Configure?.Invoke(configuration));
+            }
         }
     }
 }
