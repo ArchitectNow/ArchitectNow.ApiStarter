@@ -30,24 +30,24 @@ namespace ArchitectNow.ApiStarter.Api.Services
             }
         }
 
-	    public virtual async Task<IActionResult> AsyncOkCreated<TResult>(Func<Task<TResult>> serviceCall)
-	    {
-			try
-			{
-				var result = await serviceCall();
+        public virtual async Task<IActionResult> AsyncOkCreated<TResult>(Func<Task<TResult>> serviceCall)
+        {
+            try
+            {
+                var result = await serviceCall();
 
-				return new ObjectResult(result)
-				{
-					StatusCode = 201
-				};
-			}
-			catch (Exception exception)
-			{
-				return _exceptionResultBuilder.Build(exception);
-			}
-		}
+                return new ObjectResult(result)
+                {
+                    StatusCode = 201
+                };
+            }
+            catch (Exception exception)
+            {
+                return _exceptionResultBuilder.Build(exception);
+            }
+        }
 
-	    public virtual async Task<IActionResult> AsyncOk(Func<Task> serviceCall)
+        public virtual async Task<IActionResult> AsyncOk(Func<Task> serviceCall)
         {
             try
             {
@@ -81,10 +81,7 @@ namespace ArchitectNow.ApiStarter.Api.Services
             {
                 var result = await serviceCall();
 
-                if (EqualityComparer<TResult>.Default.Equals(result, default(TResult)))
-                {
-                    return new NotFoundResult();
-                }
+                if (EqualityComparer<TResult>.Default.Equals(result, default)) return new NotFoundResult();
 
                 return new OkObjectResult(result);
             }
@@ -93,8 +90,9 @@ namespace ArchitectNow.ApiStarter.Api.Services
                 return _exceptionResultBuilder.Build(exception);
             }
         }
-        
-        public virtual async Task<IActionResult> AsyncOkAccepted<TResult>(string location, Func<Task<TResult>> serviceCall)
+
+        public virtual async Task<IActionResult> AsyncOkAccepted<TResult>(string location,
+            Func<Task<TResult>> serviceCall)
         {
             try
             {
@@ -107,8 +105,9 @@ namespace ArchitectNow.ApiStarter.Api.Services
                 return _exceptionResultBuilder.Build(exception);
             }
         }
-        
-        public virtual async Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode, Func<Task<TResult>> serviceCall)
+
+        public virtual async Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode,
+            Func<Task<TResult>> serviceCall)
         {
             try
             {
@@ -116,7 +115,7 @@ namespace ArchitectNow.ApiStarter.Api.Services
 
                 return new ObjectResult(result)
                 {
-                    StatusCode = (int)statusCode
+                    StatusCode = (int) statusCode
                 };
             }
             catch (Exception exception)
@@ -124,22 +123,24 @@ namespace ArchitectNow.ApiStarter.Api.Services
                 return _exceptionResultBuilder.Build(exception);
             }
         }
-        
-        public virtual async Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode, Func<Task> serviceCall)
+
+        public virtual async Task<IActionResult> AsyncStatusCode<TResult>(HttpStatusCode statusCode,
+            Func<Task> serviceCall)
         {
             try
             {
                 await serviceCall();
 
-                return new StatusCodeResult((int)statusCode);
+                return new StatusCodeResult((int) statusCode);
             }
             catch (Exception exception)
             {
                 return _exceptionResultBuilder.Build(exception);
             }
         }
-        
-        public virtual async Task<IActionResult> AsyncResult<TResult>(Func<Task<TResult>> serviceCall, Func<TResult, ActionResult> createResult )
+
+        public virtual async Task<IActionResult> AsyncResult<TResult>(Func<Task<TResult>> serviceCall,
+            Func<TResult, ActionResult> createResult)
         {
             try
             {
@@ -152,8 +153,8 @@ namespace ArchitectNow.ApiStarter.Api.Services
                 return _exceptionResultBuilder.Build(exception);
             }
         }
-        
-        public virtual async Task<IActionResult> AsyncResult(Func<Task> serviceCall, Func<ActionResult> createResult )
+
+        public virtual async Task<IActionResult> AsyncResult(Func<Task> serviceCall, Func<ActionResult> createResult)
         {
             try
             {

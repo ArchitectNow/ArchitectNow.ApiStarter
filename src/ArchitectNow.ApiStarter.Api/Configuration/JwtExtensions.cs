@@ -16,7 +16,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             var jwtAppSettingOptions = configurationRoot.GetSection(nameof(JwtIssuerOptions)).Get<JwtIssuerOptions>();
 
             var issuerSigningKey = signingKey(jwtAppSettingOptions);
-            
+
             services.AddSingleton(issuerSigningKey);
 
             var tokenValidationParameters = new TokenValidationParameters
@@ -29,7 +29,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = issuerSigningKey,
-                
+
                 RequireExpirationTime = true,
                 ValidateLifetime = true,
 

@@ -11,7 +11,9 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 {
     public static class WebApiExtensions
     {
-        public static void ConfigureApi(this IServiceCollection services, FluentValidationOptions fluentValidationOptions, Action<MvcOptions> configureMvc = null, Action<MvcJsonOptions> configureJson = null)
+        public static void ConfigureApi(this IServiceCollection services,
+            FluentValidationOptions fluentValidationOptions, Action<MvcOptions> configureMvc = null,
+            Action<MvcJsonOptions> configureJson = null)
         {
             /*************************
              * IConfiguration is not available yet
@@ -34,15 +36,14 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     settings.ContractResolver = camelCasePropertyNamesContractResolver;
                     settings.Converters.Add(new IsoDateTimeConverter());
                     settings.Converters.Add(new StringEnumConverter(new DefaultNamingStrategy()));
-					
+
                     configureJson?.Invoke(options);
                 });
 
 
             if (fluentValidationOptions.Enabled)
-            {
-                mvcBuilder.AddFluentValidation(configuration => fluentValidationOptions.Configure?.Invoke(configuration));
-            }
+                mvcBuilder.AddFluentValidation(
+                    configuration => fluentValidationOptions.Configure?.Invoke(configuration));
         }
     }
 }

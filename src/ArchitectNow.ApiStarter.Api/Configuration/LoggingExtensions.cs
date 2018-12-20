@@ -14,10 +14,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         {
             var baseDir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             var logPath = Path.Combine(baseDir ?? string.Empty, "logs");
-            if (!Directory.Exists(logPath))
-            {
-                Directory.CreateDirectory(logPath);
-            }
+            if (!Directory.Exists(logPath)) Directory.CreateDirectory(logPath);
 
             var loggingConfiguration = loggerConfiguration ?? new LoggerConfiguration()
                                            .ReadFrom.Configuration(configuration)

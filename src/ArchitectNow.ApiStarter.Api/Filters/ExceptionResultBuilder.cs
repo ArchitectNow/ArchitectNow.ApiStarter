@@ -18,52 +18,41 @@ namespace ArchitectNow.ApiStarter.Api.Filters
             _hostingEnvironment = hostingEnvironment;
             _logger = logger;
         }
+
         public IActionResult Build(Exception exception)
         {
             var stackTrace = "No stack trace available";
 
             if (!string.Equals(_hostingEnvironment.EnvironmentName, "Production", StringComparison.OrdinalIgnoreCase))
-            {
                 stackTrace = exception.GetBaseException().StackTrace;
-            }
             var statusCode = 500;
             string content = null;
             var message = exception.GetBaseException().Message;
 
             if (exception is DependencyResolutionException)
-            {
                 message = $"Dependency Exception: Please ensure that classes implement the interface: {message}";
-            }
 
-            if (exception is NotFoundException)
-            {
-                return new NotFoundResult();
-            }
+            if (exception is NotFoundException) return new NotFoundResult();
 
             if (exception is ApiException apiException)
             {
-                statusCode = (int)apiException.StatusCode;
+                statusCode = (int) apiException.StatusCode;
                 content = apiException.GetContent();
-                if (!string.IsNullOrEmpty(apiException.Message))
-                {
-                    message = apiException.GetBaseException().Message;
-                }
+                if (!string.IsNullOrEmpty(apiException.Message)) message = apiException.GetBaseException().Message;
             }
 
             return CreateActionResult(content, message, stackTrace, statusCode, exception);
         }
 
-        protected virtual IActionResult CreateActionResult(string content, string message, string stackTrace, int statusCode, Exception exception)
+        protected virtual IActionResult CreateActionResult(string content, string message, string stackTrace,
+            int statusCode, Exception exception)
         {
             var apiError = new ApiError
             {
                 Error = content ?? message
             };
 
-            if (!string.IsNullOrEmpty(stackTrace))
-            {
-                apiError.StackTrace = stackTrace;
-            }
+            if (!string.IsNullOrEmpty(stackTrace)) apiError.StackTrace = stackTrace;
 
             var objectResult = new ObjectResult(apiError)
             {

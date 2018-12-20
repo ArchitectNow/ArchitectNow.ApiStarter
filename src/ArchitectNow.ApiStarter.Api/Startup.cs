@@ -3,10 +3,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Reflection;
 using System.Text;
-using ArchitectNow.ApiStarter.Api.Models.Validation;
 using ArchitectNow.ApiStarter.Api.Configuration;
+using ArchitectNow.ApiStarter.Api.Models.Validation;
 using ArchitectNow.ApiStarter.Api.Services;
-using ArchitectNow.ApiStarter.Api.Models;
 using ArchitectNow.ApiStarter.Common;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
@@ -17,14 +16,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
-using Microsoft.AspNetCore.Routing.Tree;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using NJsonSchema;
 using Serilog;
 using Serilog.Context;
 
@@ -32,9 +29,9 @@ namespace ArchitectNow.ApiStarter.Api
 {
     public class Startup
     {
-        private readonly ILogger<Startup> _logger;
         private readonly IConfiguration _configuration;
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ILogger<Startup> _logger;
         private IContainer _applicationContainer;
 
         public Startup(ILogger<Startup> logger, IConfiguration configuration, IHostingEnvironment hostingEnvironment)
@@ -46,7 +43,7 @@ namespace ArchitectNow.ApiStarter.Api
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-       public IServiceProvider ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             _logger.LogInformation($"{nameof(ConfigureServices)} starting...");
 
@@ -67,25 +64,22 @@ namespace ArchitectNow.ApiStarter.Api
             }
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
-            services.AddResponseCompression(options =>
-            {
-                options.Providers.Add<GzipCompressionProvider>();
-            });
+            services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
 
             services.AddOpenApiDocument(settings =>
             {
                 settings.Title = "ArchitectNow API Workshop";
                 settings.Description = "ASPNETCore API built as a demonstration during workshop";
 
-                settings.SerializerSettings = new JsonSerializerSettings()
+                settings.SerializerSettings = new JsonSerializerSettings
                 {
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     Converters = {new StringEnumConverter()}
                 };
-       
+
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
             });
-            
+
             services.AddCors();
 
             //last
@@ -119,10 +113,7 @@ namespace ArchitectNow.ApiStarter.Api
             builder.UseFileServer();
 
             var uploadsPath = configuration["uploadsPath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "uploads");
-            if (!Directory.Exists(uploadsPath))
-            {
-                Directory.CreateDirectory(uploadsPath);
-            }
+            if (!Directory.Exists(uploadsPath)) Directory.CreateDirectory(uploadsPath);
 
             builder.UseStaticFiles();
 
@@ -131,19 +122,16 @@ namespace ArchitectNow.ApiStarter.Api
             builder.UseAuthentication();
 
             builder.UseResponseCompression();
-            
-            builder.UseSwagger(settings =>
-            {
-                settings.Path = "/docs/swagger.json";
-            });
+
+            builder.UseSwagger(settings => { settings.Path = "/docs/swagger.json"; });
 
             builder.UseSwaggerUi3(settings =>
             {
                 settings.EnableTryItOut = true;
                 settings.Path = "/docs";
-                settings.DocumentPath = "/docs/swagger.json";                
+                settings.DocumentPath = "/docs/swagger.json";
             });
-            
+
             builder.Use(async (context, next) =>
             {
                 LogContext.PushProperty("Environment", _hostingEnvironment.EnvironmentName);

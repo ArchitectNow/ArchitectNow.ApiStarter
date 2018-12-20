@@ -11,7 +11,6 @@ namespace ArchitectNow.ApiStarter.Api
 {
     public class Program
     {
-
         private static IConfiguration _configuration;
 
         public static async Task<int> Main(string[] args)
@@ -21,11 +20,13 @@ namespace ArchitectNow.ApiStarter.Api
                 _configuration = new ConfigurationBuilder()
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json", false, true)
-                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", true)
+                    .AddJsonFile(
+                        $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json",
+                        true)
                     .AddEnvironmentVariables()
                     .AddCommandLine(args)
                     .Build();
-                
+
                 Log.Logger = _configuration.ConfigureLogging().CreateLogger();
                 var host = BuildWebHost(args);
 

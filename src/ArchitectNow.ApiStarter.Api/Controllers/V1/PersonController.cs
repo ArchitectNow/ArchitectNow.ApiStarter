@@ -66,6 +66,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 
                     return Mapper.Map<PersonVm>(newItem);
                 }
+
                 var existingItem =
                     await _personRepository.GetOneAsync(data.Id.Value);
 

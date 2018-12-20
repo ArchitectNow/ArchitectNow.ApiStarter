@@ -14,7 +14,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         {
             return configuration.InEnvironment("development");
         }
-        
+
         private static bool InEnvironment(this IConfiguration configuration, string environment)
         {
             var env = configuration["environment"];

@@ -18,7 +18,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces().InstancePerLifetimeScope();
             builder.RegisterType<ServiceInvoker>().As<IServiceInvoker>().InstancePerLifetimeScope();
             builder.RegisterType<ExceptionResultBuilder>().As<IExceptionResultBuilder>().InstancePerLifetimeScope();
-            
+
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
 
             builder.RegisterType<GlobalExceptionFilter>().AsSelf().InstancePerLifetimeScope();
@@ -30,13 +30,10 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                 var key = context.Resolve<JwtSigningKey>();
                 if (key == null)
-                {
                     context.Resolve<ILogger<WebModule>>().LogWarning("JwtSigningKey is not defined");
-                }
                 else
-                {
-                    issuerOptions.SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-                }
+                    issuerOptions.SigningCredentials =
+                        new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
                 return new OptionsWrapper<JwtIssuerOptions>(issuerOptions);
             }).As<IOptions<JwtIssuerOptions>>().InstancePerLifetimeScope();
