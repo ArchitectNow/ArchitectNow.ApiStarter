@@ -18,12 +18,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using NSwag.AspNetCore;
-using NSwag.SwaggerGeneration.Processors;
 using Serilog;
 using Serilog.Context;
 
@@ -51,9 +50,19 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.AddOptions();
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
-            
+
             services.AddSwaggerDocument();
-            
+
+            services.AddHealthChecks()
+                .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"], "MongoDb")
+                .AddCheck("Custom", () =>
+                {
+                    return HealthCheckResult.Unhealthy();
+                });
+           
+            services.AddHealthChecksUI();
+
+
 //            services.AddOpenApiDocument(settings =>
 //            {
 //                settings.Title = "ArchitectNow API Workshop";
@@ -68,9 +77,9 @@ namespace ArchitectNow.ApiStarter.Api
 //                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
 //                settings.DocumentName = "v1";
 //            });
-            
+
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
-            
+
             services.AddSwaggerDocument(settings =>
             {
                 settings.Title = "ArchitectNow API Workshop";
@@ -84,7 +93,6 @@ namespace ArchitectNow.ApiStarter.Api
 
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = "1.0";
-     
             });
 
             services.AddAuthorization(options =>
@@ -145,16 +153,14 @@ namespace ArchitectNow.ApiStarter.Api
             builder.UseResponseCompression();
 
             builder.UseApiVersioning();
+            
+            builder.UseHealthChecksUI();
 
-            builder.UseSwagger(settings =>
-            {
-                settings.Path = "/docs/{documentName}/swagger.json";
-            });
+            builder.UseSwagger(settings => { settings.Path = "/docs/swagger.json"; });
 
             builder.UseSwaggerUi3(settings =>
             {
                 settings.Path = "/docs";
-                settings.DocumentPath = "/docs/{documentName}/swagger.json";
                 settings.EnableTryItOut = true;
             });
 
