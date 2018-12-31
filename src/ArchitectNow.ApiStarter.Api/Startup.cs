@@ -13,7 +13,9 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutofacSerilogIntegration;
 using AutoMapper;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
@@ -153,8 +155,14 @@ namespace ArchitectNow.ApiStarter.Api
             builder.UseResponseCompression();
 
             builder.UseApiVersioning();
-            
+
             builder.UseHealthChecksUI();
+            
+            builder.UseHealthChecks("/health", new HealthCheckOptions()
+            {
+                Predicate = _ => true,
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+            });            
 
             builder.UseSwagger(settings => { settings.Path = "/docs/swagger.json"; });
 
