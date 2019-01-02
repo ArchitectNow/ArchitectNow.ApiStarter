@@ -8,7 +8,7 @@ The technology platform utilizes:
 * ASP.NET Core 2 - https://www.microsoft.com/net/download/core
 * Autofac - https://autofac.org/
 * Automapper - http://automapper.org/
-* FluentValidation - https://github.com/JeremySkinner/FluentValidation
+* FluentValidation - https://fluentvalidation.net/
 * Serilog - https://serilog.net/
 * NSwag for ASP.NET Core  - https://github.com/RSuter/NSwag (for Swagger integration and NSwag support)
 * xUnit for the unit test harness - https://xunit.github.io/ 
