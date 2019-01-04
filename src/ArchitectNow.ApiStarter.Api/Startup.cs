@@ -63,22 +63,6 @@ namespace ArchitectNow.ApiStarter.Api
            
             services.AddHealthChecksUI();
 
-
-//            services.AddOpenApiDocument(settings =>
-//            {
-//                settings.Title = "ArchitectNow API Workshop";
-//                settings.Description = "ASPNETCore API built as a demonstration during workshop";
-//
-//                settings.SerializerSettings = new JsonSerializerSettings
-//                {
-//                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-//                    Converters = {new StringEnumConverter()}
-//                };
-//
-//                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-//                settings.DocumentName = "v1";
-//            });
-
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
 
             AddSwaggerDocumentForVersion(services, "1.0", "1");
