@@ -4,6 +4,7 @@ using ArchitectNow.ApiStarter.Api;
 using ArchitectNow.ApiStarter.Api.Configuration;
 using ArchitectNow.ApiStarter.Common;
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -52,10 +53,13 @@ namespace ArchitectNow.ApiStarter.Tests
             var modules = new Module[]
             {
                 new CommonModule(),
-                new ApiModule()
+                new WebModule(), 
             };
 
-            return serviceCollection.ConfigureAutofacContainer(configuration, b => { }, modules);
+            var builder = new ContainerBuilder();
+            builder.RegisterModule(new CommonModule());
+            builder.RegisterModule(new WebModule());
+            return builder.Build();
         }
 
         private void ConfigureLogger(ServiceCollection collection)
