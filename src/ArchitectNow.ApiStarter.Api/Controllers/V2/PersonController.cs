@@ -16,6 +16,7 @@ using NSwag.Annotations;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V2
 {
+    [ApiVersion("2.0")]
     public class PersonController : ApiV2BaseController
     {
         private readonly ICurrentUserService _currentUserService;

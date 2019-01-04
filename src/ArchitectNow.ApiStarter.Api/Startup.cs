@@ -25,6 +25,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NSwag.SwaggerGeneration.Processors;
 using Serilog;
 using Serilog.Context;
 
@@ -53,8 +54,6 @@ namespace ArchitectNow.ApiStarter.Api
             services.AddOptions();
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
-            services.AddSwaggerDocument();
-
             services.AddHealthChecks()
                 .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"], "MongoDb")
                 .AddCheck("Custom", () =>
@@ -82,20 +81,8 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
 
-            services.AddSwaggerDocument(settings =>
-            {
-                settings.Title = "ArchitectNow API Workshop";
-                settings.Description = "ASPNETCore API built as a demonstration during workshop";
-
-                settings.SerializerSettings = new JsonSerializerSettings
-                {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                    Converters = {new StringEnumConverter()}
-                };
-
-                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
-                settings.DocumentName = "1.0";
-            });
+            AddSwaggerDocumentForVersion(services, "1.0", "1");
+            AddSwaggerDocumentForVersion(services, "2.0", "2");
 
             services.AddAuthorization(options =>
             {
@@ -154,8 +141,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseResponseCompression();
 
-            builder.UseApiVersioning();
-
             builder.UseHealthChecksUI();
             
             builder.UseHealthChecks("/health", new HealthCheckOptions()
@@ -164,12 +149,13 @@ namespace ArchitectNow.ApiStarter.Api
                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
             });            
 
-            builder.UseSwagger(settings => { settings.Path = "/docs/swagger.json"; });
+            builder.UseSwagger(settings => { settings.Path = "/docs/{documentName}/swagger.json"; });
 
             builder.UseSwaggerUi3(settings =>
             {
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
+                settings.DocumentPath = "/docs/{documentName}/swagger.json";
             });
 
             builder.Use(async (context, next) =>
@@ -221,5 +207,24 @@ namespace ArchitectNow.ApiStarter.Api
             var signingKey = new JwtSigningKey(keyBytes);
             return signingKey;
         }
+        
+        private void AddSwaggerDocumentForVersion(IServiceCollection services, string documentName, string groupName)
+        {
+            services.AddSwaggerDocument(settings =>
+            {
+                settings.Title = "ArchitectNow API Workshop";
+                settings.Description = "ASPNETCore API built as a demonstration during workshop";
+
+                settings.SerializerSettings = new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Converters = {new StringEnumConverter()}
+                };
+
+                settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
+                settings.DocumentName = documentName;
+                settings.ApiGroupNames = new[] {groupName};
+            });
+        }        
     }
 }

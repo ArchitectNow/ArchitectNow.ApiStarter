@@ -4,6 +4,7 @@ using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
 using Autofac;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -37,6 +38,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                 return new OptionsWrapper<JwtIssuerOptions>(issuerOptions);
             }).As<IOptions<JwtIssuerOptions>>().InstancePerLifetimeScope();
+
+            builder.RegisterType<MemoryCache>().As<IMemoryCache>().SingleInstance();
         }
     }
 }

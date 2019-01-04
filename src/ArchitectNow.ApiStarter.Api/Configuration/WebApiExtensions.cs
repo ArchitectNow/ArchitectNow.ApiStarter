@@ -28,7 +28,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.ReportApiVersions = true;
-                options.UseApiBehavior = true;
+                options.UseApiBehavior = false;
             });
             
             var mvcBuilder = services.AddMvcCore(o =>
@@ -37,6 +37,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     o.ModelValidatorProviders.Clear();
                     configureMvc?.Invoke(o);
                 })
+                .AddJsonFormatters()
                 .AddJsonOptions(options =>
                 {
                     var settings = options.SerializerSettings;
@@ -48,7 +49,13 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                     settings.Converters.Add(new StringEnumConverter(new DefaultNamingStrategy()));
 
                     configureJson?.Invoke(options);
-                }).AddApiExplorer();
+                });
+
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
             
             if (fluentValidationOptions.Enabled)
                 mvcBuilder.AddFluentValidation(

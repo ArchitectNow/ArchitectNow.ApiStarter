@@ -20,6 +20,7 @@ using NSwag.Annotations;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V2
 {
+    [ApiVersion("2.0")]
     public class SecurityController : ApiV2BaseController
     {
         private readonly JwtIssuerOptions _jwtOptions;
@@ -34,7 +35,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
             _jwtOptions = jwtOptions.Value;
         }
 
-        [HttpPost("login")]
+        [HttpPost()]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
