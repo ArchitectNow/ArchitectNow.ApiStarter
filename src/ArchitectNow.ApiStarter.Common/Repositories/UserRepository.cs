@@ -13,10 +13,10 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         public UserRepository(ILogger<User> logger,
-            IDataContext dataContext, ICacheService cacheService,
+            ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<User> validator = null
-        ) : base(logger, dataContext, cacheService, options, validator)
+        ) : base(logger, cacheService, options, validator)
         {
         }
 

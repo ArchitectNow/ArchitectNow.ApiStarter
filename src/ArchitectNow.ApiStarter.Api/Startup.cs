@@ -64,7 +64,7 @@ namespace ArchitectNow.ApiStarter.Api
                 services.AddHealthChecksUI();
             }
 
-            services.ConfigureApi(new FluentValidationOptions {Enabled = false});
+            services.ConfigureApi(new FluentValidationOptions {Enabled = true});
 
             AddSwaggerDocumentForVersion(services, "1.0", "1");
             AddSwaggerDocumentForVersion(services, "2.0", "2");

@@ -19,6 +19,5 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
     {
         string CollectionName { get; }
         Task ConfigureIndexes();
-        bool HasValidUser();
     }
 }

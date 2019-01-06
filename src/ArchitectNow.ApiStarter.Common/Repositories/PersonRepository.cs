@@ -15,10 +15,10 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
     public class PersonRepository : BaseRepository<Person>, IPersonRepository
     {
         public PersonRepository(ILogger<Person> logger,
-            IDataContext dataContext, ICacheService cacheService,
+            ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<Person> validator = null
-        ) : base(logger, dataContext, cacheService, options, validator)
+        ) : base(logger, cacheService, options, validator)
         {
         }
 

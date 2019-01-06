@@ -24,14 +24,13 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         private string _databaseName;
 
         protected BaseRepository(ILogger<TModel> logger,
-            IDataContext dataContext, ICacheService cacheService,
+             ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<TModel> validator = null
         )
         {
             _validator = validator ?? new InlineValidator<TModel>();
             CacheService = cacheService;
-            CurrentContext = dataContext;
             Logger = logger;
             _options = options.Value;
 
@@ -39,7 +38,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         }
 
         protected ICacheService CacheService { get; }
-        protected IDataContext CurrentContext { get; }
         protected ILogger<TModel> Logger { get; }
 
         public IMongoDatabase Database => _client.GetDatabase(_databaseName);
@@ -62,16 +60,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         }
 
         public abstract string CollectionName { get; }
-
-
-        /// <summary>
-        ///     Determines whether [has valid user].
-        /// </summary>
-        /// <returns></returns>
-        public bool HasValidUser()
-        {
-            return CurrentContext?.CurrentUserId != null && CurrentContext?.CurrentUserId != Guid.Empty;
-        }
 
         public virtual async Task<bool> DeleteAllAsync()
         {
@@ -112,9 +100,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         {
             if (item.Id != Guid.Empty)
                 item.UpdatedDate = DateTime.UtcNow;
-
-            if (HasValidUser())
-                item.OwnerUserId = CurrentContext.CurrentUserId;
 
             var errors = await ValidateObject(item);
 
