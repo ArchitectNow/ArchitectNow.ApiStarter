@@ -41,7 +41,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
             {
                 var personClient = new PersonClient();
 
-                // personClient.Token = token;
+                personClient.Token = token;
             
                 try
                 {
@@ -50,6 +50,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
                     if (result != null)
                     { 
                         Console.WriteLine("Successfully called a secure endpoint");  
+                        Console.WriteLine("Validated token as user: " + result.Email);
                     }
                 }
                 catch (Exception e)

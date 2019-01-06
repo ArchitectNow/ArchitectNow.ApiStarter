@@ -32,7 +32,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         ///     Secure method used to test security
         /// </summary>
         /// <returns></returns>
-        [HttpGet("securitytest")]
+        [HttpGet()]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
@@ -45,7 +45,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// </summary>
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
-        [HttpGet("search/{Id}")]
+        [HttpGet("{Id}")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
@@ -64,7 +64,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        [HttpPost("update")]
+        [HttpPost()]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
         public async Task<IActionResult> Update([FromBody] PersonVm data)

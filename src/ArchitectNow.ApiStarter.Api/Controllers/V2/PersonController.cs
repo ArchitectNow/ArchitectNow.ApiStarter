@@ -32,7 +32,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         ///     Sample method which is only included in API V2
         /// </summary>
         /// <returns></returns>
-        [HttpGet("v2method")]
+        [HttpGet()]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> V2Method()
@@ -44,7 +44,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         ///     Secure method used to test security
         /// </summary>
         /// <returns></returns>
-        [HttpGet("securitytest")]
+        [HttpGet()]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
@@ -57,7 +57,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         /// </summary>
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
-        [HttpGet("search/{Id}")]
+        [HttpGet("{Id}")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
@@ -76,7 +76,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        [HttpPost("update")]
+        [HttpPost()]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
         public async Task<IActionResult> Update([FromBody] PersonVm data)
