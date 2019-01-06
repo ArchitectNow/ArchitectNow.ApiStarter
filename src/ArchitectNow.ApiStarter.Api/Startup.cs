@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -171,6 +172,10 @@ namespace ArchitectNow.ApiStarter.Api
             });
 
             builder.UseMvc();
+           
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "docs");
+            builder.UseRewriter(option);
 
             appLifetime.ApplicationStopped.Register(Log.CloseAndFlush);
 

@@ -21,7 +21,11 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
 
-            services.AddRouting(options => options.LowercaseUrls = true);
+            services.AddRouting(options =>
+            {
+                options.LowercaseUrls = true;
+                options.LowercaseQueryStrings = true;
+            });
 
             services.AddApiVersioning(options =>
             {
@@ -35,6 +39,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
                     o.ModelValidatorProviders.Clear();
+             
                     configureMvc?.Invoke(o);
                 })
                 .AddJsonFormatters()
