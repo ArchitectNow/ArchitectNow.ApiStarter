@@ -54,11 +54,15 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
-            services.AddHealthChecks()
-                .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"], "MongoDb")
-                .AddCheck("Custom", () => { return HealthCheckResult.Healthy(); });
+            if (!_hostingEnvironment.IsDevelopment())
+            {
+                services.AddHealthChecks()
+                    .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"],
+                        "MongoDb")
+                    .AddCheck("Custom", () => { return HealthCheckResult.Healthy(); });
 
-            services.AddHealthChecksUI();
+                services.AddHealthChecksUI();
+            }
 
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
 
@@ -126,13 +130,16 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseResponseCompression();
 
-            builder.UseHealthChecksUI();
-
-            builder.UseHealthChecks("/health", new HealthCheckOptions
+            if (!_hostingEnvironment.IsDevelopment())
             {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
+                builder.UseHealthChecksUI();
+    
+                builder.UseHealthChecks("/health", new HealthCheckOptions
+                {
+                    Predicate = _ => true,
+                    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+                });
+            }
 
             builder.UseSwagger(settings => { settings.Path = "/docs/{documentName}/swagger.json"; });
 
