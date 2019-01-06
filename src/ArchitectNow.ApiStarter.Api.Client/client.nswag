@@ -1,11 +1,11 @@
 ﻿{
   "swaggerGenerator": {
     "fromSwagger": {      
-      "url": "http://localhost:5150/api/docs/v1/swagger.json",
+      "url": "http://localhost:5000/docs/1.0/swagger.json",
       "output": null
     }
   },
-  "codeGenerators": {
+ "codeGenerators": {
     "swaggerToCSharpClient": {
       "clientBaseClass": "BaseClient",
       "generateClientClasses": true,
@@ -33,6 +33,7 @@
       "dateTimeType": "System.DateTimeOffset",
       "timeType": "System.TimeSpan",
       "timeSpanType": "System.TimeSpan",
+      "ResponseArrayType": "System.Collections.Generic.List",
       "arrayType": "System.Collections.Generic.List",
       "dictionaryType": "System.Collections.Generic.Dictionary",
       "classStyle": "Poco",
