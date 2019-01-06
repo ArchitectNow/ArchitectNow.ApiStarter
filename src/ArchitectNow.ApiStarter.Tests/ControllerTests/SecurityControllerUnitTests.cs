@@ -1,5 +1,3 @@
-using System;
-using System.Net;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Controllers.V2;
 using ArchitectNow.ApiStarter.Api.Filters;
@@ -23,16 +21,16 @@ namespace ArchitectNow.ApiStarter.Tests.ControllerTests
             {
                 // Create a reference to the exceptionResult builder so we can assert on it later
                 var exceptionResultBuilder = mockContainer.Mock<IExceptionResultBuilder>();
-                
+
                 // Provide a real implementation of ServiceInvoker with it's dependencies mocked out
                 var serviceInvoker = mockContainer.Create<ServiceInvoker>();
                 mockContainer.Provide<IServiceInvoker>(serviceInvoker);
-                
+
                 // Setup security service to return null for any request to login
                 var securityService = mockContainer.Mock<ISecurityService>();
                 securityService.Setup(service => service.Login(It.IsAny<string>(), It.IsAny<string>()))
                     .ReturnsAsync((User) null);
-                
+
                 // Create the system controller with all of its dependencies mocked
                 var target = mockContainer.Create<SecurityController>();
 

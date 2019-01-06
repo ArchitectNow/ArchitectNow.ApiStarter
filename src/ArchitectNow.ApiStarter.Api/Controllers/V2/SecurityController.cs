@@ -35,7 +35,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
             _jwtOptions = jwtOptions.Value;
         }
 
-        [HttpPost()]
+        [HttpPost]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]

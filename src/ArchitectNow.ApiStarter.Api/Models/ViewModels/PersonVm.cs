@@ -12,10 +12,10 @@ namespace ArchitectNow.ApiStarter.Api.Models.ViewModels
         }
 
         /// <summary>
-        /// Unique identifier for this object 
+        ///     Unique identifier for this object
         /// </summary>
         public Guid? Id { get; set; }
-        
+
         public string NameFirst { get; set; }
         public string NameLast { get; set; }
 

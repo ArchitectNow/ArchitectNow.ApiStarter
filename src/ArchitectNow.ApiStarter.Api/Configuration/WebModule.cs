@@ -17,7 +17,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         protected override void Load(ContainerBuilder builder)
         {
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces().InstancePerLifetimeScope();
-            
+
             builder.RegisterType<ServiceInvoker>().As<IServiceInvoker>().InstancePerLifetimeScope();
             builder.RegisterType<ExceptionResultBuilder>().As<IExceptionResultBuilder>().InstancePerLifetimeScope();
             builder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();

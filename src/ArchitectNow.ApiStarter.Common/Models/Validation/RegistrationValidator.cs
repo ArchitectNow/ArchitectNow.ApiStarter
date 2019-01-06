@@ -12,7 +12,6 @@ namespace ArchitectNow.ApiStarter.Common.Models.Validation
             RuleFor(vm => vm.NameFirst).MinimumLength(3);
             RuleFor(vm => vm.NameLast).MinimumLength(3);
             RuleFor(vm => vm.Password).Password().WithMessage("Password must be 6 numbers only");
-
         }
     }
 }

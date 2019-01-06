@@ -3,22 +3,22 @@
     public class UserVm
     {
         /// <summary>
-        /// User Email
+        ///     User Email
         /// </summary>
         public string Email { get; set; }
 
         /// <summary>
-        /// First Name
+        ///     First Name
         /// </summary>
         public string NameFirst { get; set; }
 
         /// <summary>
-        /// Last Name
+        ///     Last Name
         /// </summary>
         public string NameLast { get; set; }
 
         /// <summary>
-        /// Security role for this user
+        ///     Security role for this user
         /// </summary>
         public string UserRole { get; set; }
     }

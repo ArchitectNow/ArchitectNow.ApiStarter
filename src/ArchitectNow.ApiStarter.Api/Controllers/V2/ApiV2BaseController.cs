@@ -1,6 +1,5 @@
 ﻿using ArchitectNow.ApiStarter.Api.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V2
 {

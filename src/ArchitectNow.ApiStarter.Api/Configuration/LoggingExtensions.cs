@@ -21,7 +21,8 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                                            .WriteTo
                                            .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10,
                                                shared: true)
-                                           .WriteTo.Console(theme: AnsiConsoleTheme.Code);
+                                           .WriteTo
+                                           .Console(theme: AnsiConsoleTheme.Code);
 
             Log.Write(LogEventLevel.Information, "Logging has started");
 

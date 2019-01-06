@@ -64,6 +64,7 @@ namespace ArchitectNow.ApiStarter.Common.Models.Exceptions
                 var body = JsonConvert.SerializeObject(Content);
                 return body;
             }
+
             return null;
         }
     }

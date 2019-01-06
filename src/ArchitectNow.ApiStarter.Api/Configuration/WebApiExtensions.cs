@@ -3,7 +3,6 @@ using ArchitectNow.ApiStarter.Api.Filters;
 using ArchitectNow.ApiStarter.Api.Models.Validation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
@@ -19,11 +18,11 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
             /*************************
              * IConfiguration is not available yet
              *************************/
-            
+
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
-            
+
             services.AddRouting(options => options.LowercaseUrls = true);
-            
+
             services.AddApiVersioning(options =>
             {
                 options.AssumeDefaultVersionWhenUnspecified = true;
@@ -31,7 +30,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 options.ReportApiVersions = true;
                 options.UseApiBehavior = false;
             });
-            
+
             var mvcBuilder = services.AddMvcCore(o =>
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
@@ -57,7 +56,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 options.GroupNameFormat = "VVV";
                 options.SubstituteApiVersionInUrl = true;
             });
-            
+
             if (fluentValidationOptions.Enabled)
                 mvcBuilder.AddFluentValidation(
                     configuration => fluentValidationOptions.Configure?.Invoke(configuration));

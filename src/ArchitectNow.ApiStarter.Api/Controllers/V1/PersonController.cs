@@ -32,7 +32,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         }
 
         /// <summary>
-        /// Secure method used to test security
+        ///     Secure method used to test security
         /// </summary>
         /// <returns></returns>
         [HttpGet("securitytest")]
@@ -44,7 +44,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         }
 
         /// <summary>
-        /// Search for people
+        ///     Search for people
         /// </summary>
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
@@ -62,7 +62,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         }
 
         /// <summary>
-        /// Update person object
+        ///     Update person object
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>

@@ -25,7 +25,6 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
-using NSwag.SwaggerGeneration.Processors;
 using Serilog;
 using Serilog.Context;
 
@@ -52,12 +51,13 @@ namespace ArchitectNow.ApiStarter.Api
             _logger.LogInformation($"{nameof(ConfigureServices)} starting...");
 
             services.AddOptions();
+
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
             services.AddHealthChecks()
                 .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"], "MongoDb")
                 .AddCheck("Custom", () => { return HealthCheckResult.Healthy(); });
-           
+
             services.AddHealthChecksUI();
 
             services.ConfigureApi(new FluentValidationOptions {Enabled = false});
@@ -73,7 +73,8 @@ namespace ArchitectNow.ApiStarter.Api
             if (!_hostingEnvironment.IsDevelopment())
             {
                 var key = _configuration["ApplicationInsights:InstrumentationKey"];
-                services.AddApplicationInsightsTelemetry(key);
+
+                if (!string.IsNullOrEmpty(key)) services.AddApplicationInsightsTelemetry(key);
             }
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
@@ -83,15 +84,15 @@ namespace ArchitectNow.ApiStarter.Api
 
             //last
             _applicationContainer = services.CreateAutofacContainer((builder, serviceCollection) =>
-            {
-                builder.RegisterLogger();
-
-                serviceCollection.AddAutoMapper(expression =>
                 {
-                    expression.ConstructServicesUsing(type => _applicationContainer.Resolve(type));
-                });
-            }, 
-                new WebModule(), 
+                    builder.RegisterLogger();
+
+                    serviceCollection.AddAutoMapper(expression =>
+                    {
+                        expression.ConstructServicesUsing(type => _applicationContainer.Resolve(type));
+                    });
+                },
+                new WebModule(),
                 new CommonModule());
 
             // Create the IServiceProvider based on the container.
@@ -109,6 +110,7 @@ namespace ArchitectNow.ApiStarter.Api
             IConfiguration configuration)
         {
             var logger = builder.ApplicationServices.GetService<ILogger<Startup>>();
+
             logger.LogInformation($"{nameof(Configure)} starting...");
 
             builder.UseFileServer();
@@ -125,12 +127,12 @@ namespace ArchitectNow.ApiStarter.Api
             builder.UseResponseCompression();
 
             builder.UseHealthChecksUI();
-            
-            builder.UseHealthChecks("/health", new HealthCheckOptions()
+
+            builder.UseHealthChecks("/health", new HealthCheckOptions
             {
                 Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
-            });            
+                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+            });
 
             builder.UseSwagger(settings => { settings.Path = "/docs/{documentName}/swagger.json"; });
 
@@ -190,7 +192,7 @@ namespace ArchitectNow.ApiStarter.Api
             var signingKey = new JwtSigningKey(keyBytes);
             return signingKey;
         }
-        
+
         private void AddSwaggerDocumentForVersion(IServiceCollection services, string documentName, string groupName)
         {
             services.AddSwaggerDocument(settings =>
@@ -207,8 +209,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
-            
             });
-        }        
+        }
     }
 }
