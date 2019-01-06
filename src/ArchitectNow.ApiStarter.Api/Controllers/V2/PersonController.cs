@@ -27,6 +27,18 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         {
             _personRepository = personRepository;
         }
+        
+        /// <summary>
+        ///     Sample method which is only included in API V2
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("v2method")]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
+        public async Task<IActionResult> V2Method()
+        {
+            return await ServiceInvoker.AsyncOk( () => Task.FromResult(true));
+        }
 
         /// <summary>
         ///     Secure method used to test security
