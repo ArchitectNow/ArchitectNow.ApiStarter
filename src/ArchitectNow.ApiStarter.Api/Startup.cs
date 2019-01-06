@@ -149,6 +149,16 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
+
+                settings.DocExpansion = "Full";
+                
+//                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
+//                {
+//                    Type = SwaggerSecuritySchemeType.ApiKey,
+//                    Name = "Authorization",
+//                    In = SwaggerSecurityApiKeyLocation.Header
+//                }));
+
             });
 
             builder.Use(async (context, next) =>
@@ -221,6 +231,8 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
+                
+               
             });
         }
     }
