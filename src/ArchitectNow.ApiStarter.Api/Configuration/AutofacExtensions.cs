@@ -12,8 +12,10 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule<WebModule>();
-            foreach (var module in modules) builder.RegisterModule(module);
+            foreach (var module in modules)
+            {
+                builder.RegisterModule(module);
+            }
 
             additionalAction?.Invoke(builder, services);
 

@@ -11,7 +11,11 @@ namespace ArchitectNow.ApiStarter.Api.Models.ViewModels
             Addresses = new List<Address>();
         }
 
+        /// <summary>
+        /// Unique identifier for this object 
+        /// </summary>
         public Guid? Id { get; set; }
+        
         public string NameFirst { get; set; }
         public string NameLast { get; set; }
 

@@ -38,7 +38,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         [HttpPost()]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Login([FromBody] LoginVm parameters)
         {
             return await ServiceInvoker.AsyncOk(async () =>
@@ -64,7 +64,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         [HttpPost("register")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Register([FromBody] RegistrationVm parameters)
         {
             return await ServiceInvoker.AsyncOk(async () => await _securityService.Register(parameters));

@@ -56,10 +56,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.AddHealthChecks()
                 .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"], "MongoDb")
-                .AddCheck("Custom", () =>
-                {
-                    return HealthCheckResult.Unhealthy();
-                });
+                .AddCheck("Custom", () => { return HealthCheckResult.Healthy(); });
            
             services.AddHealthChecksUI();
 
@@ -93,7 +90,9 @@ namespace ArchitectNow.ApiStarter.Api
                 {
                     expression.ConstructServicesUsing(type => _applicationContainer.Resolve(type));
                 });
-            }, new CommonModule());
+            }, 
+                new WebModule(), 
+                new CommonModule());
 
             // Create the IServiceProvider based on the container.
             var provider = new AutofacServiceProvider(_applicationContainer);
@@ -208,6 +207,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
+            
             });
         }        
     }

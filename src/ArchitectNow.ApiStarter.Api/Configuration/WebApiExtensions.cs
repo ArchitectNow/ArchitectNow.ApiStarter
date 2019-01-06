@@ -21,6 +21,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
              *************************/
             
             services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            
             services.AddRouting(options => options.LowercaseUrls = true);
             
             services.AddApiVersioning(options =>

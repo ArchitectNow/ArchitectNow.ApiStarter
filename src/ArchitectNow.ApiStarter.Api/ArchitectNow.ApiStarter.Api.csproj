@@ -2,10 +2,16 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <LangVersion>7.1</LangVersion>
+    <PackageVersion>1.2.3</PackageVersion>
   </PropertyGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\ArchitectNow.ApiStarter.Api.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\ArchitectNow.ApiStarter.Api.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="2.2.1" />
     <PackageReference Include="AspNetCore.HealthChecks.UI" Version="2.2.6" />
@@ -63,15 +69,20 @@
     <Compile Remove="ApiModule.cs" />
     <Compile Remove="Services\ICurrentUserService.cs" />
     <Compile Remove="LoggingExtensions.cs" />
+    <Compile Remove="wwwroot\**" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Remove="Models\Security\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Models\Security\**" />
+    <None Remove="wwwroot\**" />
+    <None Remove="healthchecksdb" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Models\Security\**" />
     <Content Remove="appsettings.dev.json" />
+    <Content Remove="wwwroot\**" />
   </ItemGroup>
 </Project>

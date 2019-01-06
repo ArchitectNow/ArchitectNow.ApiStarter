@@ -31,18 +31,27 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
             _personRepository = personRepository;
         }
 
+        /// <summary>
+        /// Secure method used to test security
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("securitytest")]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
         {
             return await ServiceInvoker.AsyncOk(() => _currentUserService.GetUserInformation());
         }
 
+        /// <summary>
+        /// Search for people
+        /// </summary>
+        /// <param name="searchParams">Search parameters</param>
+        /// <returns></returns>
         [HttpGet("search/{Id}")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
-        public async Task<IActionResult> Search([FromRoute] string id, [FromQuery] string searchParams = "")
+        public async Task<IActionResult> Search([FromQuery] string searchParams = "")
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
@@ -52,6 +61,12 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
             });
         }
 
+        /// <summary>
+        /// Update person object
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
         [HttpPost("update")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]

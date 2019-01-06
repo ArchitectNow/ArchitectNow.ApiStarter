@@ -35,10 +35,15 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
             _jwtOptions = jwtOptions.Value;
         }
 
-        [HttpPost()]
+        /// <summary>
+        /// Login to the system
+        /// </summary>
+        /// <param name="parameters">Login parameters</param>
+        /// <returns></returns>
+        [HttpPost("")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Login([FromBody] LoginVm parameters)
         {
             return await ServiceInvoker.AsyncOk(async () =>
@@ -61,10 +66,15 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
             });
         }
 
+        /// <summary>
+        /// Register a new user
+        /// </summary>
+        /// <param name="parameters">New user information</param>
+        /// <returns></returns>
         [HttpPost("register")]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest,typeof(ApiError))]
         public async Task<IActionResult> Register([FromBody] RegistrationVm parameters)
         {
             return await ServiceInvoker.AsyncOk(async () => await _securityService.Register(parameters));
