@@ -20,7 +20,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
         /// <param name="searchParams">Search parameters</param>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        System.Threading.Tasks.Task<System.Collections.Generic.List<PersonVm>> SearchAsync(string id, string searchParams = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
+        System.Threading.Tasks.Task<System.Collections.Generic.List<PersonVm>> SearchAsync(string searchParams = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken));
     
         /// <summary>Update person object</summary>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
@@ -169,14 +169,10 @@ namespace ArchitectNow.ApiStarter.Api.Client
         /// <param name="searchParams">Search parameters</param>
         /// <exception cref="SwaggerException">A server side error occurred.</exception>
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        public async System.Threading.Tasks.Task<System.Collections.Generic.List<PersonVm>> SearchAsync(string id, string searchParams = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
+        public async System.Threading.Tasks.Task<System.Collections.Generic.List<PersonVm>> SearchAsync(string searchParams = null, System.Threading.CancellationToken cancellationToken = default(System.Threading.CancellationToken))
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-    
             var urlBuilder_ = new System.Text.StringBuilder();
-            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/person/search/{Id}?");
-            urlBuilder_.Replace("{Id}", System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append(BaseUrl != null ? BaseUrl.TrimEnd('/') : "").Append("/api/v1/person/search?");
             if (searchParams != null) 
             {
                 urlBuilder_.Append("searchParams=").Append(System.Uri.EscapeDataString(ConvertToString(searchParams, System.Globalization.CultureInfo.InvariantCulture))).Append("&");

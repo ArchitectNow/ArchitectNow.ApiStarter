@@ -57,7 +57,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
         /// </summary>
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
-        [HttpGet("{Id}")]
+        [HttpGet()]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
