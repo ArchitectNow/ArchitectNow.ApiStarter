@@ -8,7 +8,6 @@ using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
-using ArchitectNow.ApiStarter.Common.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,15 +18,13 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
     [ApiVersion("1.0")]
     public class PersonController : ApiV1BaseController
     {
-        private readonly ICurrentUserService _currentUserService;
         private readonly IPersonRepository _personRepository;
 
-        public PersonController(ICurrentUserService currentUserService,
+        public PersonController(
             IMapper mapper,
             IServiceInvoker serviceInvoker,
             IPersonRepository personRepository) : base(mapper, serviceInvoker)
         {
-            _currentUserService = currentUserService;
             _personRepository = personRepository;
         }
 
@@ -40,7 +37,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
         {
-            return await ServiceInvoker.AsyncOk(() => _currentUserService.GetUserInformation());
+            return await ServiceInvoker.AsyncOk( () => Task.FromResult(HttpContext.User.GetUserInformation()));
         }
 
         /// <summary>

@@ -83,18 +83,13 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public virtual async Task<List<TModel>> GetAllAsync(bool onlyActive = true)
         {
-            var cacheKey = BuildCacheKey(nameof(GetAllAsync), onlyActive);
-
-            var results = CacheService.Get<List<TModel>>(cacheKey);
-            if (results != null)
-                return results;
-
+            List<TModel> results;
+            
             if (onlyActive)
                 results = await GetCollection().Find(x => x.IsActive).ToListAsync();
             else
                 results = await GetCollection().Find(x => x.IsActive).ToListAsync();
 
-            CacheService.Add(cacheKey, results);
             return results;
         }
 
@@ -158,7 +153,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
             Logger.LogInformation("Entity Deleted to {CollectionName}: \'{id}\'", CollectionName, id);
 
-            var cacheKey = BuildCacheKey("GetOne", id);
+            var cacheKey = BuildCacheKey(nameof(GetOneAsync), id);
 
             CacheService.Remove(cacheKey);
 

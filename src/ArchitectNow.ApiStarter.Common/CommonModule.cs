@@ -15,9 +15,6 @@ namespace ArchitectNow.ApiStarter.Common
         {
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces();
 
-            builder.RegisterType<DataContext>().As<IDataContext>()
-                .InstancePerLifetimeScope();
-
             builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<MongoOptions>("mongo"))
                 .AsSelf().SingleInstance();
 
