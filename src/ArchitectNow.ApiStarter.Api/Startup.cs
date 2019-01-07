@@ -75,7 +75,7 @@ namespace ArchitectNow.ApiStarter.Api
             {
                 options.ForwardedHeaders = ForwardedHeaders.All;
             });
-            
+
             AddSwaggerDocumentForVersion(services, "1.0", "1");
             AddSwaggerDocumentForVersion(services, "2.0", "2");
 
@@ -83,6 +83,7 @@ namespace ArchitectNow.ApiStarter.Api
             {
                 options.AddPolicy("Default", builder => builder.RequireAuthenticatedUser().Build());
             });
+
 
             if (!_hostingEnvironment.IsDevelopment())
             {
@@ -139,7 +140,7 @@ namespace ArchitectNow.ApiStarter.Api
                 ForwardedHeaders = ForwardedHeaders.All,
                 RequireHeaderSymmetry = false
             });
-            
+
             builder.UseCors(b => b.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
             builder.UseAuthentication();
@@ -149,7 +150,7 @@ namespace ArchitectNow.ApiStarter.Api
             if (!_hostingEnvironment.IsDevelopment())
             {
                 builder.UseHealthChecksUI();
-    
+
                 builder.UseHealthChecks("/health", new HealthCheckOptions
                 {
                     Predicate = _ => true,
@@ -159,17 +160,21 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseSwagger(settings =>
             {
-                settings.PostProcess = (document, request) =>
+                if (!_configuration.IsDevelopment())
                 {
-//                    _logger.LogInformation("PostProcess - Headers: {0}", ExtractHeaders(request));
-//                    _logger.LogInformation("PostProcess - Scheme: {0}", request.Scheme);
-                    document.Host = ExtractHost(request);
-                    document.BasePath = ExtractPath(request);
-                    document.Schemes.Clear();
-                    var httpScheme = ExtractProto(request) == "http" ? SwaggerSchema.Http : SwaggerSchema.Https;
-                    document.Schemes.Add(httpScheme);
-                };
-
+                    settings.PostProcess = (document, request) =>
+                    {
+                        document.Host = ExtractHost(request);
+                        document.BasePath = ExtractPath(request);
+                        document.Schemes.Clear();
+    
+                        var scheme = ExtractProto(request);
+                        
+                        var httpScheme = scheme.ToLower().Take(5) != "https" ? SwaggerSchema.Http : SwaggerSchema.Https;
+                        document.Schemes.Add(httpScheme);
+                    };   
+                }
+                
                 settings.Path = "/docs/{documentName}/swagger.json";
             });
 
@@ -180,7 +185,6 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
                 settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
                 settings.DocExpansion = "Full";
-                
             });
 
             builder.Use(async (context, next) =>
@@ -204,7 +208,7 @@ namespace ArchitectNow.ApiStarter.Api
             });
 
             builder.UseMvc();
-           
+
             var option = new RewriteOptions();
             option.AddRedirect("^$", "docs");
             builder.UseRewriter(option);
@@ -249,13 +253,13 @@ namespace ArchitectNow.ApiStarter.Api
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     Converters = {new StringEnumConverter()}
                 };
-                
+
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
             });
         }
-        
+
         private string ExtractHost(HttpRequest request)
         {
             return request.Headers.ContainsKey("X-Forwarded-Host")
@@ -263,13 +267,17 @@ namespace ArchitectNow.ApiStarter.Api
                 : request.Host.Host;
         }
 
-        private string ExtractProto(HttpRequest request) =>
-            request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Protocol;
+        private string ExtractProto(HttpRequest request)
+        {
+            return request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Protocol;
+        }
 
-        private string ExtractPath(HttpRequest request) =>
-            request.Headers.ContainsKey("X-Forwarded-Host") ?
-                new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").AbsolutePath :
-                string.Empty;
+        private string ExtractPath(HttpRequest request)
+        {
+            return request.Headers.ContainsKey("X-Forwarded-Host")
+                ? new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").AbsolutePath
+                : string.Empty;
+        }
 
 //        private string ExtractHeaders(HttpRequest request)
 //        {

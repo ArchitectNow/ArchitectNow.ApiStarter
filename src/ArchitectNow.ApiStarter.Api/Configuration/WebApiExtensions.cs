@@ -42,6 +42,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
              
                     configureMvc?.Invoke(o);
                 })
+                .AddAuthorization()
                 .AddJsonFormatters()
                 .AddJsonOptions(options =>
                 {

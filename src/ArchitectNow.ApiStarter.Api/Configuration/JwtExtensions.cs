@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -35,12 +37,29 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                 ClockSkew = TimeSpan.Zero
             };
-
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            
+            services.AddAuthentication(options =>
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
+                    options.RequireHttpsMetadata = false;
                     options.TokenValidationParameters = tokenValidationParameters;
-                    options.Events = jwtBearerEvents ?? new JwtBearerEvents();
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            var task = Task.Run(() =>
+                            {
+                                if (context.Request.Query.TryGetValue("securityToken", out var securityToken))
+                                    context.Token = securityToken.FirstOrDefault();
+                            });
+
+                            return task;
+                        }
+                    };
                 });
         }
     }

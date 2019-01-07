@@ -46,8 +46,8 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
         [HttpGet()]
-        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
         {
             return await ServiceInvoker.AsyncOk(async () =>
@@ -65,8 +65,8 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
         [HttpPost()]
-        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Update([FromBody] PersonVm data)
         {
             return await ServiceInvoker.AsyncOk(async () =>
