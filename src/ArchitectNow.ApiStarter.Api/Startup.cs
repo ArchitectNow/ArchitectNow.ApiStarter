@@ -158,15 +158,14 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseSwagger(settings =>
             {
-                settings.Path = "/docs/{documentName}/swagger.json";
-
                 settings.PostProcess = (document, request) =>
                 {
-                    _logger.LogInformation("Headers: {0}", ExtractHeaders(request));
+                    _logger.LogInformation("PostProcess - Headers: {0}", ExtractHeaders(request));
                     document.Host = ExtractHost(request);
                     document.BasePath = ExtractPath(request);
                 };
 
+                settings.Path = "/docs/{documentName}/swagger.json";
             });
 
             builder.UseSwaggerUi3(settings =>
@@ -174,7 +173,12 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
-//                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
+                settings.TransformToExternalPath = (route, request) =>
+                {
+                    _logger.LogInformation("TransformToExternalPath - Headers: {0}", ExtractHeaders(request));
+
+                    return ExtractPath(request) + route;
+                };
                 settings.DocExpansion = "Full";
                 
             });
