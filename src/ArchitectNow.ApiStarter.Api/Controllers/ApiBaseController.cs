@@ -6,6 +6,7 @@ using ArchitectNow.ApiStarter.Api.Services;
 using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.Validation;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using NSwag.Annotations;
@@ -16,6 +17,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers
     [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ValidationError[]))]
     [SwaggerResponse(HttpStatusCode.InternalServerError, typeof(ApiError))]
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
+    [Authorize]
     public abstract class ApiBaseController : Controller
     {
         protected ApiBaseController(IMapper mapper, IServiceInvoker serviceInvoker)
