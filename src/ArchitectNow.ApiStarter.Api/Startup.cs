@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using ArchitectNow.ApiStarter.Api.Configuration;
@@ -14,9 +15,11 @@ using Autofac.Extensions.DependencyInjection;
 using AutofacSerilogIntegration;
 using AutoMapper;
 using HealthChecks.UI.Client;
+using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
@@ -149,14 +152,24 @@ namespace ArchitectNow.ApiStarter.Api
                 });
             }
 
-            builder.UseSwagger(settings => { settings.Path = "/docs/{documentName}/swagger.json"; });
+            builder.UseSwagger(settings =>
+            {
+                settings.Path = "/docs/{documentName}/swagger.json";
+
+                settings.PostProcess = (document, request) =>
+                {
+                    document.Host = ExtractHost(request);
+                    document.BasePath = ExtractPath(request);
+                };
+
+            });
 
             builder.UseSwaggerUi3(settings =>
             {
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
-
+                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
                 settings.DocExpansion = "Full";
                 
 //                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
@@ -234,7 +247,7 @@ namespace ArchitectNow.ApiStarter.Api
                     ContractResolver = new CamelCasePropertyNamesContractResolver(),
                     Converters = {new StringEnumConverter()}
                 };
-
+                
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
@@ -242,5 +255,18 @@ namespace ArchitectNow.ApiStarter.Api
                
             });
         }
+        
+        private string ExtractHost(HttpRequest request) =>
+            request.Headers.ContainsKey("X-Forwarded-Host") ?
+                new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").Host :
+                request.Host.Host;
+
+        private string ExtractProto(HttpRequest request) =>
+            request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Protocol;
+
+        private string ExtractPath(HttpRequest request) =>
+            request.Headers.ContainsKey("X-Forwarded-Host") ?
+                new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").AbsolutePath :
+                string.Empty;
     }
 }
