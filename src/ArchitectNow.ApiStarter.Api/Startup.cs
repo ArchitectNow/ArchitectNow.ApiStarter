@@ -15,7 +15,6 @@ using Autofac.Extensions.DependencyInjection;
 using AutofacSerilogIntegration;
 using AutoMapper;
 using HealthChecks.UI.Client;
-using Microsoft.ApplicationInsights.DependencyCollector;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
@@ -158,6 +157,7 @@ namespace ArchitectNow.ApiStarter.Api
 
                 settings.PostProcess = (document, request) =>
                 {
+                    _logger.LogInformation("Headers: {0}", ExtractHeaders(request));
                     document.Host = ExtractHost(request);
                     document.BasePath = ExtractPath(request);
                 };
@@ -252,14 +252,17 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
                 
+                settings.PostProcess
                
             });
         }
         
-        private string ExtractHost(HttpRequest request) =>
-            request.Headers.ContainsKey("X-Forwarded-Host") ?
-                new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").Host :
-                request.Host.Host;
+        private string ExtractHost(HttpRequest request)
+        {
+            return request.Headers.ContainsKey("X-Forwarded-Host")
+                ? new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").Host
+                : request.Host.Host;
+        }
 
         private string ExtractProto(HttpRequest request) =>
             request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Protocol;
@@ -268,5 +271,10 @@ namespace ArchitectNow.ApiStarter.Api
             request.Headers.ContainsKey("X-Forwarded-Host") ?
                 new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").AbsolutePath :
                 string.Empty;
+
+        private string ExtractHeaders(HttpRequest request)
+        {
+            return string.Join("|", request.Headers.Select(x => $"{x.Key}: {x.Value.ToString()}"));
+        }
     }
 }
