@@ -16,11 +16,7 @@ variables:
 steps:
 - script: |
    dotnet ./builds/GitVersion/GitVersion.dll /output buildServer  
-  displayName: GitVersion
-- script: |
-   dotnet restore --configfile src/nuget.config src/.
-   dotnet test src/ArchitectNow.ApiStarter.Tests
-  displayName: 'Application Tests'
+  displayName: GitVersion 
 - script: docker build -f Dockerfile -t $(dockerId).azurecr.io/$(imageName):$(build.buildNumber) -t $(dockerId).azurecr.io/$(imageName):latest .
   displayName: 'docker build'
 - script: |
