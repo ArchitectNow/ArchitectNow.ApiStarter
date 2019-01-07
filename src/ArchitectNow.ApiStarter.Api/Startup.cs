@@ -169,7 +169,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
-                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
+//                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
                 settings.DocExpansion = "Full";
                 
 //                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
