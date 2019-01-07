@@ -161,6 +161,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.PostProcess = (document, request) =>
                 {
                     _logger.LogInformation("PostProcess - Headers: {0}", ExtractHeaders(request));
+                    _logger.LogInformation("PostProcess - Scheme: {0}", request.Scheme);
                     document.Host = ExtractHost(request);
                     document.BasePath = ExtractPath(request);
                 };
@@ -173,12 +174,7 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Path = "/docs";
                 settings.EnableTryItOut = true;
                 settings.DocumentPath = "/docs/{documentName}/swagger.json";
-                settings.TransformToExternalPath = (route, request) =>
-                {
-                    _logger.LogInformation("TransformToExternalPath - Headers: {0}", ExtractHeaders(request));
-
-                    return ExtractPath(request) + route;
-                };
+                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
                 settings.DocExpansion = "Full";
                 
             });
