@@ -70,6 +70,11 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.ConfigureApi(new FluentValidationOptions {Enabled = true});
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.All;
+            });
+            
             AddSwaggerDocumentForVersion(services, "1.0", "1");
             AddSwaggerDocumentForVersion(services, "2.0", "2");
 
@@ -172,13 +177,6 @@ namespace ArchitectNow.ApiStarter.Api
 //                settings.TransformToExternalPath = (route, request) => ExtractPath(request) + route;
                 settings.DocExpansion = "Full";
                 
-//                settings.GeneratorSettings.DocumentProcessors.Add(new SecurityDefinitionAppender("Authorization", new SwaggerSecurityScheme
-//                {
-//                    Type = SwaggerSecuritySchemeType.ApiKey,
-//                    Name = "Authorization",
-//                    In = SwaggerSecurityApiKeyLocation.Header
-//                }));
-
             });
 
             builder.Use(async (context, next) =>
