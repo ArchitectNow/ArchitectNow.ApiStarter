@@ -251,9 +251,6 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
-                
-                settings.PostProcess
-               
             });
         }
         
