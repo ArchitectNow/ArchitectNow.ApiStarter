@@ -29,6 +29,7 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
+using NSwag;
 using Serilog;
 using Serilog.Context;
 
@@ -160,10 +161,13 @@ namespace ArchitectNow.ApiStarter.Api
             {
                 settings.PostProcess = (document, request) =>
                 {
-                    _logger.LogInformation("PostProcess - Headers: {0}", ExtractHeaders(request));
-                    _logger.LogInformation("PostProcess - Scheme: {0}", request.Scheme);
+//                    _logger.LogInformation("PostProcess - Headers: {0}", ExtractHeaders(request));
+//                    _logger.LogInformation("PostProcess - Scheme: {0}", request.Scheme);
                     document.Host = ExtractHost(request);
                     document.BasePath = ExtractPath(request);
+                    document.Schemes.Clear();
+                    var httpScheme = ExtractProto(request) == "http" ? SwaggerSchema.Http : SwaggerSchema.Https;
+                    document.Schemes.Add(httpScheme);
                 };
 
                 settings.Path = "/docs/{documentName}/swagger.json";
@@ -267,9 +271,9 @@ namespace ArchitectNow.ApiStarter.Api
                 new Uri($"{ExtractProto(request)}://{request.Headers["X-Forwarded-Host"].First()}").AbsolutePath :
                 string.Empty;
 
-        private string ExtractHeaders(HttpRequest request)
-        {
-            return string.Join("|", request.Headers.Select(x => $"{x.Key}: {x.Value.ToString()}"));
-        }
+//        private string ExtractHeaders(HttpRequest request)
+//        {
+//            return string.Join("|", request.Headers.Select(x => $"{x.Key}: {x.Value.ToString()}"));
+//        }
     }
 }
