@@ -24,7 +24,4 @@
   <ItemGroup>
     <Content Update="testsettings.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MiscTests" />
-  </ItemGroup>
 </Project>
