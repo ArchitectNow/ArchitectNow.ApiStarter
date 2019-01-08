@@ -1,5 +1,4 @@
 ﻿using System;
-using ArchitectNow.ApiStarter.Api.Services;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ArchitectNow.ApiStarter.Api.Filters

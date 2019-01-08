@@ -25,11 +25,8 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public Guid? OwnerUserId { get; set; }
 
-        [JsonIgnore]
-        [BsonIgnore]
-        public List<ValidationResult> ValidationErrors { get; set; }
+        [JsonIgnore] [BsonIgnore] public List<ValidationResult> ValidationErrors { get; set; }
 
-        [BsonExtraElements]
-        public Dictionary<string, object> ExtraElements { get; set; }
+        [BsonExtraElements] public Dictionary<string, object> ExtraElements { get; set; }
     }
 }

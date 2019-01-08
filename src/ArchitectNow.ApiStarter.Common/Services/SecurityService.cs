@@ -35,7 +35,6 @@ namespace ArchitectNow.ApiStarter.Common.Services
                 NameLast = registration.NameLast
             };
 
-
             return await _userRepository.SaveAsync(user);
         }
     }

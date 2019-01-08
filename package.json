@@ -1,0 +1,11 @@
+{
+  "name": "an.apistarter",
+  "scripts": {
+    "docker:clean": "docker stop an.apistarter && docker rm an.apistarter",
+    "docker:build": "docker build --rm -f Dockerfile -t an.apistarter:latest .",
+    "docker:run": "docker run --name an.apistarter -p 7401:7401 -d an.apistarter",
+    "docker:all": "npm run docker:clean && npm run docker:build && npm run docker:run"
+  },
+  "private": true,
+  "devDependencies": {}
+}

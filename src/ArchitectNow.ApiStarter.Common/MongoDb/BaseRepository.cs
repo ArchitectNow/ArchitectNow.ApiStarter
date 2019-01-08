@@ -24,14 +24,13 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         private string _databaseName;
 
         protected BaseRepository(ILogger<TModel> logger,
-            IDataContext dataContext, ICacheService cacheService,
+            ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<TModel> validator = null
         )
         {
             _validator = validator ?? new InlineValidator<TModel>();
             CacheService = cacheService;
-            CurrentContext = dataContext;
             Logger = logger;
             _options = options.Value;
 
@@ -39,7 +38,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         }
 
         protected ICacheService CacheService { get; }
-        protected IDataContext CurrentContext { get; }
         protected ILogger<TModel> Logger { get; }
 
         public IMongoDatabase Database => _client.GetDatabase(_databaseName);
@@ -63,16 +61,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public abstract string CollectionName { get; }
 
-
-        /// <summary>
-        ///     Determines whether [has valid user].
-        /// </summary>
-        /// <returns></returns>
-        public bool HasValidUser()
-        {
-            return CurrentContext?.CurrentUserId != null && CurrentContext?.CurrentUserId != Guid.Empty;
-        }
-
         public virtual async Task<bool> DeleteAllAsync()
         {
             var filter = new BsonDocument();
@@ -83,18 +71,13 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public virtual async Task<List<TModel>> GetAllAsync(bool onlyActive = true)
         {
-            var cacheKey = BuildCacheKey(nameof(GetAllAsync), onlyActive);
-
-            var results = CacheService.Get<List<TModel>>(cacheKey);
-            if (results != null)
-                return results;
+            List<TModel> results;
 
             if (onlyActive)
                 results = await GetCollection().Find(x => x.IsActive).ToListAsync();
             else
                 results = await GetCollection().Find(x => x.IsActive).ToListAsync();
 
-            CacheService.Add(cacheKey, results);
             return results;
         }
 
@@ -117,9 +100,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         {
             if (item.Id != Guid.Empty)
                 item.UpdatedDate = DateTime.UtcNow;
-
-            if (HasValidUser())
-                item.OwnerUserId = CurrentContext.CurrentUserId;
 
             var errors = await ValidateObject(item);
 
@@ -158,7 +138,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
             Logger.LogInformation("Entity Deleted to {CollectionName}: \'{id}\'", CollectionName, id);
 
-            var cacheKey = BuildCacheKey("GetOne", id);
+            var cacheKey = BuildCacheKey(nameof(GetOneAsync), id);
 
             CacheService.Remove(cacheKey);
 
@@ -248,7 +228,8 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
                 Name = name
             };
 
-            await GetCollection().Indexes.CreateOneAsync(keys, options);
+            var model = new CreateIndexModel<TModel>(keys, options);
+            await GetCollection().Indexes.CreateOneAsync(model);
         }
 
         /// <summary>
@@ -265,7 +246,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         protected virtual async Task<long> CountAsync(Expression<Func<TModel, bool>> filter)
         {
-            return await GetCollection().CountAsync(filter);
+            return await GetCollection().CountDocumentsAsync(filter);
         }
 
         protected async Task<List<TModel>> FindAsync(Expression<Func<TModel, bool>> filter)

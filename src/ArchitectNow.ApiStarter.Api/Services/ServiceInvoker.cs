@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using ArchitectNow.ApiStarter.Api.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArchitectNow.ApiStarter.Api.Services
@@ -80,8 +81,7 @@ namespace ArchitectNow.ApiStarter.Api.Services
             {
                 var result = await serviceCall();
 
-                if (EqualityComparer<TResult>.Default.Equals(result, default(TResult)))
-                    return new NotFoundResult();
+                if (EqualityComparer<TResult>.Default.Equals(result, default)) return new NotFoundResult();
 
                 return new OkObjectResult(result);
             }

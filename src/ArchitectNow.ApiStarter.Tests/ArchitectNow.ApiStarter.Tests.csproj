@@ -1,18 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.0.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="2.0.5" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-    <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="FluentAssertions" Version="4.19.4" />
+    <PackageReference Include="Autofac.Extras.Moq" Version="4.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="2.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />    
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="FluentAssertions" Version="5.5.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchitectNow.ApiStarter.Api\ArchitectNow.ApiStarter.Api.csproj" />
@@ -20,8 +23,5 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="testsettings.json" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="MiscTests" />
   </ItemGroup>
 </Project>

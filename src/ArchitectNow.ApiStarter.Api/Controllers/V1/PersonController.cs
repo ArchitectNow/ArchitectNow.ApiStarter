@@ -8,52 +8,64 @@ using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
-using ArchitectNow.ApiStarter.Common.Services;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
+    [ApiVersion("1.0")]
     public class PersonController : ApiV1BaseController
     {
-        private readonly ICurrentUserService _currentUserService;
         private readonly IPersonRepository _personRepository;
 
-        public PersonController(ICurrentUserService currentUserService,
+        public PersonController(
             IMapper mapper,
             IServiceInvoker serviceInvoker,
             IPersonRepository personRepository) : base(mapper, serviceInvoker)
         {
-            _currentUserService = currentUserService;
             _personRepository = personRepository;
         }
 
-        [HttpGet("securitytest")]
+        /// <summary>
+        ///     Secure method used to test security
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
-        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(Dictionary<string, string>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
         {
-            return await ServiceInvoker.AsyncOk(() => _currentUserService.GetUserInformation());
+            return await ServiceInvoker.AsyncOk(() => Task.FromResult(HttpContext.User.GetUserInformation()));
         }
 
-        [HttpGet("search/{Id}")]
-        [AllowAnonymous]
+        /// <summary>
+        ///     Search for people
+        /// </summary>
+        /// <param name="searchParams">Search parameters</param>
+        /// <returns></returns>
+        [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
-        public async Task<IActionResult> Search([FromRoute] string Id, [FromQuery] string SearchParams = "")
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
+        public async Task<IActionResult> Search([FromQuery] string searchParams = "")
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
-                var people = await _personRepository.Search(SearchParams);
+                var people = await _personRepository.Search(searchParams);
 
                 return people.Select(x => Mapper.Map<PersonVm>(x));
             });
         }
 
-        [HttpPost("update")]
-        [AllowAnonymous]
+        /// <summary>
+        ///     Update person object
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        /// <exception cref="NotFoundException"></exception>
+        [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Update([FromBody] PersonVm data)
         {
             return await ServiceInvoker.AsyncOk(async () =>
@@ -66,6 +78,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 
                     return Mapper.Map<PersonVm>(newItem);
                 }
+
                 var existingItem =
                     await _personRepository.GetOneAsync(data.Id.Value);
 

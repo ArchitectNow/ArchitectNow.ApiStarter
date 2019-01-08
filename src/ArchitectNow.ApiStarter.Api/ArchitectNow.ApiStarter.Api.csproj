@@ -1,42 +1,89 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <LangVersion>7.1</LangVersion>
+    <PackageVersion>1.2.3</PackageVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DocumentationFile>bin\Debug\ArchitectNow.ApiStarter.Api.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DocumentationFile>bin\Release\ArchitectNow.ApiStarter.Api.xml</DocumentationFile>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
-    <PackageReference Include="AutoMapper" Version="6.2.2" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
-    <PackageReference Include="FluentValidation" Version="7.3.4" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="7.3.4" />
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="2.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.0.0" />
-    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.1.5" />
-    <PackageReference Include="Microsoft.NETCore.App" Version="2.0.5" />
-    <PackageReference Include="NSwag.AspNetCore" Version="11.12.16" />
-    <PackageReference Include="Serilog.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="2.2.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI" Version="2.2.6" />
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.1" />
+    <PackageReference Include="AutofacSerilogIntegration" Version="2.0.1-dev-00031" />
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="FluentValidation" Version="8.1.2" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.1.2" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.6.0-beta2" />
+    <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.HealthChecks" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.3.0" />    
+    <PackageReference Include="NSwag.AspNetCore" Version="12.0.9" />    
+    <PackageReference Include="NSwag.SwaggerGeneration.AspNetCore" Version="12.0.9" />    
+    <PackageReference Include="Serilog" Version="2.7.2-dev-01033" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.ColoredConsole" Version="3.0.1" />
     <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ArchitectNow.ApiStarter.Common\ArchitectNow.ApiStarter.Common.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Configuration\AutoMapperExtensions.cs" />
+    <Compile Remove="Configuration\CompressionExtensions.cs" />
+    <Compile Remove="Configuration\SwaggerExtensions.cs" />
+    <Compile Remove="Services\AsyncExtensions.cs" />
+    <Compile Remove="Services\ElmahIoSink.cs" />
+    <Compile Remove="Services\IExceptionResultBuilder.cs" />
+    <Compile Remove="Services\ExceptionResultBuilder.cs" />
+    <Compile Remove="Services\CurrentUserService.cs" />
+    <Compile Remove="Models\Security\**" />
+    <Compile Remove="ApiModule.cs" />
+    <Compile Remove="Services\ICurrentUserService.cs" />
+    <Compile Remove="LoggingExtensions.cs" />
+    <Compile Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Models\Security\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Models\Security\**" />
+    <None Remove="wwwroot\**" />
+    <None Remove="healthchecksdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Models\Security\**" />
+    <Content Remove="appsettings.dev.json" />
+    <Content Remove="wwwroot\**" />
   </ItemGroup>
 </Project>
