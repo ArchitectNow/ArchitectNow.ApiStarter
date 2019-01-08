@@ -59,7 +59,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
-            if (!_hostingEnvironment.IsDevelopment())
+            if (_hostingEnvironment.IsDevelopment())
             {
                 services.AddHealthChecks()
                     .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"],
@@ -147,7 +147,7 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseResponseCompression();
 
-            if (!_hostingEnvironment.IsDevelopment())
+            if (_hostingEnvironment.IsDevelopment())
             {
                 builder.UseHealthChecksUI();
 

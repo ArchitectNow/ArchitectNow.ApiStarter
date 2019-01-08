@@ -220,25 +220,25 @@ namespace ArchitectNow.ApiStarter.Api.Client
                             }
                         }
                         else
-                        if (status_ == "404") 
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
-                            throw new SwaggerException("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, null);
-                        }
-                        else
                         if (status_ == "400") 
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
-                            var result_ = default(System.Collections.Generic.List<ValidationError>); 
+                            var result_ = default(object); 
                             try
                             {
-                                result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Collections.Generic.List<ValidationError>>(responseData_, _settings.Value);
+                                result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<object>(responseData_, _settings.Value);
                             } 
                             catch (System.Exception exception_) 
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<System.Collections.Generic.List<ValidationError>>("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, result_, null);
+                            throw new SwaggerException<object>("\nor\n", (int)response_.StatusCode, responseData_, headers_, result_, null);
+                        }
+                        else
+                        if (status_ == "404") 
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            throw new SwaggerException("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                         else
                         if (status_ == "500") 
@@ -330,25 +330,25 @@ namespace ArchitectNow.ApiStarter.Api.Client
                             }
                         }
                         else
-                        if (status_ == "404") 
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
-                            throw new SwaggerException("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, null);
-                        }
-                        else
                         if (status_ == "400") 
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
-                            var result_ = default(System.Collections.Generic.List<ValidationError>); 
+                            var result_ = default(object); 
                             try
                             {
-                                result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<System.Collections.Generic.List<ValidationError>>(responseData_, _settings.Value);
+                                result_ = Newtonsoft.Json.JsonConvert.DeserializeObject<object>(responseData_, _settings.Value);
                             } 
                             catch (System.Exception exception_) 
                             {
                                 throw new SwaggerException("Could not deserialize the response body.", (int)response_.StatusCode, responseData_, headers_, exception_);
                             }
-                            throw new SwaggerException<System.Collections.Generic.List<ValidationError>>("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, result_, null);
+                            throw new SwaggerException<object>("\nor\n", (int)response_.StatusCode, responseData_, headers_, result_, null);
+                        }
+                        else
+                        if (status_ == "404") 
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false); 
+                            throw new SwaggerException("A server side error occurred.", (int)response_.StatusCode, responseData_, headers_, null);
                         }
                         else
                         if (status_ == "500") 
