@@ -40,7 +40,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// </summary>
         /// <param name="parameters">Login parameters</param>
         /// <returns></returns>
-        [HttpPost()]
+        [HttpPost]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
@@ -71,7 +71,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// </summary>
         /// <param name="parameters">New user information</param>
         /// <returns></returns>
-        [HttpPost()]
+        [HttpPost]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]

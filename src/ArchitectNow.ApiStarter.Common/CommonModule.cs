@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.Security;
-using ArchitectNow.ApiStarter.Common.MongoDb;
 using Autofac;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;

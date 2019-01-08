@@ -37,7 +37,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
 
                 ClockSkew = TimeSpan.Zero
             };
-            
+
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -61,7 +61,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V2
             });
         }
 
-        [HttpPost()]
+        [HttpPost]
         [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(LoginResultVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]

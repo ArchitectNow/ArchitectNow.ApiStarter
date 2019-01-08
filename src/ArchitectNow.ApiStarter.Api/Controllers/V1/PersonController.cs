@@ -9,7 +9,6 @@ using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
@@ -32,12 +31,12 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         ///     Secure method used to test security
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
+        [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> SecurityTest()
         {
-            return await ServiceInvoker.AsyncOk( () => Task.FromResult(HttpContext.User.GetUserInformation()));
+            return await ServiceInvoker.AsyncOk(() => Task.FromResult(HttpContext.User.GetUserInformation()));
         }
 
         /// <summary>
@@ -45,7 +44,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// </summary>
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
-        [HttpGet()]
+        [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
@@ -64,7 +63,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// <param name="data"></param>
         /// <returns></returns>
         /// <exception cref="NotFoundException"></exception>
-        [HttpPost()]
+        [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK, typeof(PersonVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Update([FromBody] PersonVm data)

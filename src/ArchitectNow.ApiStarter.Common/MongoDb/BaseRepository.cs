@@ -24,7 +24,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         private string _databaseName;
 
         protected BaseRepository(ILogger<TModel> logger,
-             ICacheService cacheService,
+            ICacheService cacheService,
             IOptions<MongoOptions> options,
             IValidator<TModel> validator = null
         )
@@ -72,7 +72,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         public virtual async Task<List<TModel>> GetAllAsync(bool onlyActive = true)
         {
             List<TModel> results;
-            
+
             if (onlyActive)
                 results = await GetCollection().Find(x => x.IsActive).ToListAsync();
             else

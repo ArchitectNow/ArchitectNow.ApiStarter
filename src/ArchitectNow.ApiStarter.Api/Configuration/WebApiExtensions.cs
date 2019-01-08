@@ -39,7 +39,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                 {
                     o.Filters.AddService(typeof(GlobalExceptionFilter));
                     o.ModelValidatorProviders.Clear();
-             
+
                     configureMvc?.Invoke(o);
                 })
                 .AddAuthorization()

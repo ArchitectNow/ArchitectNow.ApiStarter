@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -13,7 +12,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
 
             var securityClient = new SecurityClient();
 
-            string token = "";
+            var token = "";
 
 //            client.BaseUrl = "";
 
@@ -23,14 +22,13 @@ namespace ArchitectNow.ApiStarter.Api.Client
 
                 loginParams.Email = "kvgros@architectnow.net";
                 loginParams.Password = "testtest";
-                
+
                 var loginResult = await securityClient.LoginAsync(loginParams);
 
                 token = loginResult.AuthToken;
-                
+
                 Console.WriteLine("Successful login!");
                 Console.WriteLine("Logged in as: " + loginResult.CurrentUser.Email);
-               
             }
             catch (Exception e)
             {
@@ -42,14 +40,14 @@ namespace ArchitectNow.ApiStarter.Api.Client
                 var personClient = new PersonClient();
 
                 personClient.Token = token;
-            
+
                 try
                 {
                     var result = await personClient.SecurityTestAsync();
 
                     if (result != null)
-                    { 
-                        Console.WriteLine("Successfully called a secure endpoint");  
+                    {
+                        Console.WriteLine("Successfully called a secure endpoint");
                         Console.WriteLine("Validated token as user: " + result.Email);
                     }
                 }
@@ -57,7 +55,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
                 {
                     Console.WriteLine("Security Error: " + e.Message);
                 }
-            }  
+            }
 
             Console.WriteLine("Press the any key to continue...");
             Console.ReadLine();
