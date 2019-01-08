@@ -160,19 +160,6 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseSwagger(settings =>
             {
-<<<<<<< HEAD
-                settings.PostProcess = (document, request) =>
-                {
-                    document.Host = ExtractHost(request);
-                    document.BasePath = ExtractPath(request);
-                    document.Schemes.Clear();
-
-                    var scheme = ExtractProto(request);
-
-                    var httpScheme = scheme == "http" ? SwaggerSchema.Http : SwaggerSchema.Https;
-                    document.Schemes.Add(httpScheme);
-                };
-=======
                 if (!_configuration.IsDevelopment())
                     settings.PostProcess = (document, request) =>
                     {
@@ -182,10 +169,9 @@ namespace ArchitectNow.ApiStarter.Api
 
                         var scheme = ExtractProto(request);
 
-                        var httpScheme = scheme.ToLower().Take(5) != "https" ? SwaggerSchema.Http : SwaggerSchema.Https;
+                        var httpScheme = scheme.ToLower().Take(5).ToString() != "https" ? SwaggerSchema.Http : SwaggerSchema.Https;
                         document.Schemes.Add(httpScheme);
                     };
->>>>>>> Code cleanup
 
                 settings.Path = "/docs/{documentName}/swagger.json";
             });
