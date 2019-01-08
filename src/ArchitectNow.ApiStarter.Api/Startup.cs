@@ -160,21 +160,18 @@ namespace ArchitectNow.ApiStarter.Api
 
             builder.UseSwagger(settings =>
             {
-                if (!_configuration.IsDevelopment())
+                settings.PostProcess = (document, request) =>
                 {
-                    settings.PostProcess = (document, request) =>
-                    {
-                        document.Host = ExtractHost(request);
-                        document.BasePath = ExtractPath(request);
-                        document.Schemes.Clear();
-    
-                        var scheme = ExtractProto(request);
-                        
-                        var httpScheme = scheme.ToLower().Take(5) != "https" ? SwaggerSchema.Http : SwaggerSchema.Https;
-                        document.Schemes.Add(httpScheme);
-                    };   
-                }
-                
+                    document.Host = ExtractHost(request);
+                    document.BasePath = ExtractPath(request);
+                    document.Schemes.Clear();
+
+                    var scheme = ExtractProto(request);
+
+                    var httpScheme = scheme == "http" ? SwaggerSchema.Http : SwaggerSchema.Https;
+                    document.Schemes.Add(httpScheme);
+                };
+
                 settings.Path = "/docs/{documentName}/swagger.json";
             });
 
@@ -269,7 +266,7 @@ namespace ArchitectNow.ApiStarter.Api
 
         private string ExtractProto(HttpRequest request)
         {
-            return request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Protocol;
+            return request.Headers["X-Forwarded-Proto"].FirstOrDefault() ?? request.Scheme;
         }
 
         private string ExtractPath(HttpRequest request)
