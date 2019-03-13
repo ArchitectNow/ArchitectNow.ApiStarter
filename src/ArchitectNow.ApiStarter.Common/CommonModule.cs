@@ -14,9 +14,6 @@ namespace ArchitectNow.ApiStarter.Common
         {
             builder.RegisterAssemblyTypes(ThisAssembly).AsImplementedInterfaces();
 
-            builder.Register(ctx => ctx.Resolve<IConfiguration>().CreateOptions<MongoOptions>("mongo"))
-                .AsSelf().SingleInstance();
-
             builder.Register(context =>
             {
                 var configuration = context.Resolve<IConfiguration>();

@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
+using ArchitectNow.ApiStarter.Common.BaseDb;
 using ArchitectNow.ApiStarter.Common.Models;
 using ArchitectNow.ApiStarter.Common.Models.Options;
-using ArchitectNow.ApiStarter.Common.MongoDb;
 using ArchitectNow.ApiStarter.Common.Services;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using MongoDB.Driver;
 
 namespace ArchitectNow.ApiStarter.Common.Repositories
 {
@@ -14,24 +13,13 @@ namespace ArchitectNow.ApiStarter.Common.Repositories
     {
         public UserRepository(ILogger<User> logger,
             ICacheService cacheService,
-            IOptions<MongoOptions> options,
+            ApiStarterContext context,
             IValidator<User> validator = null
-        ) : base(logger, cacheService, options, validator)
+        ) : base(logger, cacheService, context, validator)
         {
         }
 
         public override string CollectionName => nameof(User);
-
-        public override async Task ConfigureIndexes()
-        {
-            await base.ConfigureIndexes();
-
-            var collection = GetCollection();
-            var model = new CreateIndexModel<User>(
-                Builders<User>.IndexKeys.Ascending(l => l.Email),
-                new CreateIndexOptions {Name = "user_email"});
-            await collection.Indexes.CreateOneAsync(model);
-        }
 
         public async Task<User> GetByEmail(string email)
         {

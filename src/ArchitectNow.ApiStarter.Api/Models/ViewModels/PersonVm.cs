@@ -8,7 +8,7 @@ namespace ArchitectNow.ApiStarter.Api.Models.ViewModels
     {
         public PersonVm()
         {
-            Addresses = new List<Address>();
+            Addresses = new List<AddressVm>();
         }
 
         /// <summary>
@@ -19,6 +19,6 @@ namespace ArchitectNow.ApiStarter.Api.Models.ViewModels
         public string NameFirst { get; set; }
         public string NameLast { get; set; }
 
-        public List<Address> Addresses { get; set; }
+        public List<AddressVm> Addresses { get; set; }
     }
 }

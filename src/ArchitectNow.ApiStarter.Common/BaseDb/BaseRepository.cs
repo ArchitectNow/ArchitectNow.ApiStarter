@@ -3,44 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Services;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Driver;
 
-namespace ArchitectNow.ApiStarter.Common.MongoDb
+namespace ArchitectNow.ApiStarter.Common.BaseDb
 {
     public abstract class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : BaseDocument
     {
-        private readonly MongoOptions _options;
         private readonly IValidator<TModel> _validator;
-        private MongoClient _client;
-        private IMongoCollection<TModel> _collection;
-        private string _databaseName;
+        private DbSet<TModel> _collection;
 
         protected BaseRepository(ILogger<TModel> logger,
             ICacheService cacheService,
-            IOptions<MongoOptions> options,
+            ApiStarterContext context,
             IValidator<TModel> validator = null
         )
         {
             _validator = validator ?? new InlineValidator<TModel>();
             CacheService = cacheService;
             Logger = logger;
-            _options = options.Value;
-
-            InitClient();
+            Database = context;
         }
 
         protected ICacheService CacheService { get; }
         protected ILogger<TModel> Logger { get; }
 
-        public IMongoDatabase Database => _client.GetDatabase(_databaseName);
+        public ApiStarterContext Database { get; }
 
         /// <summary>
         ///     Gets the data query.
@@ -53,9 +44,9 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             get
             {
                 if (_collection == null)
-                    _collection = Database.GetCollection<TModel>(CollectionName);
+                    _collection = Database.Set<TModel>();
 
-                return _collection.AsQueryable();
+                return _collection;
             }
         }
 
@@ -63,8 +54,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public virtual async Task<bool> DeleteAllAsync()
         {
-            var filter = new BsonDocument();
-            await GetCollection().DeleteManyAsync(filter);
+            GetCollection().RemoveRange(GetCollection());
 
             return true;
         }
@@ -73,10 +63,11 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         {
             List<TModel> results;
 
+            // This doesn't seem correct
             if (onlyActive)
-                results = await GetCollection().Find(x => x.IsActive).ToListAsync();
+                results = await GetCollection().Where(x => x.IsActive).ToListAsync();
             else
-                results = await GetCollection().Find(x => x.IsActive).ToListAsync();
+                results = await GetCollection().Where(x => x.IsActive).ToListAsync();
 
             return results;
         }
@@ -90,7 +81,7 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             if (result != null)
                 return result;
 
-            result = await GetCollection().Find(x => x.Id == id).FirstOrDefaultAsync();
+            result = await GetCollection().FirstOrDefaultAsync(x => x.Id == id);
 
             CacheService.Add(cacheKey, result);
             return result;
@@ -110,13 +101,14 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             if (item.Id == Guid.Empty)
             {
                 item.Id = Guid.NewGuid();
-                await GetCollection().InsertOneAsync(item);
+                await GetCollection().AddAsync(item);
             }
             else
             {
-                var filter = Builders<TModel>.Filter.Eq("_id", item.Id);
-                await GetCollection().ReplaceOneAsync(filter, item, new UpdateOptions {IsUpsert = true});
+                GetCollection().Update(item);
             }
+
+            await Database.SaveChangesAsync();
 
             Logger.LogInformation("Entity Saved to {CollectionName}: \'{Id}\' - {@item}",
                 CollectionName,
@@ -132,9 +124,10 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public virtual async Task<bool> DeleteAsync(Guid id)
         {
-            var filter = Builders<TModel>.Filter.Eq("_id", id);
+            var filter = await GetCollection().FirstOrDefaultAsync(x => x.Id == id);
 
-            await GetCollection().DeleteOneAsync(filter);
+            GetCollection().Remove(filter);
+            await Database.SaveChangesAsync();
 
             Logger.LogInformation("Entity Deleted to {CollectionName}: \'{id}\'", CollectionName, id);
 
@@ -155,44 +148,12 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
         }
 
         /// <summary>
-        ///     Configures the indexes.
-        /// </summary>
-        public virtual async Task ConfigureIndexes()
-        {
-            await CreateIndex("Id", Builders<TModel>.IndexKeys.Ascending(x => x.Id).Ascending(x => x.IsActive));
-        }
-
-        private void InitClient()
-        {
-            var connectionString = _options.ConnectionString;
-
-            if (string.IsNullOrEmpty(connectionString))
-                throw new Exception("No DB connection found");
-
-            var pack = new ConventionPack
-            {
-                new EnumRepresentationConvention(BsonType.String),
-                new CamelCaseElementNameConvention()
-            };
-
-            ConventionRegistry.Register("AN Conventions", pack, t => true);
-            MongoDefaults.MaxConnectionIdleTime = TimeSpan.FromMinutes(1);
-
-            _databaseName = _options.DatabaseName;
-
-            if (string.IsNullOrEmpty(_databaseName))
-                throw new Exception("No database name found");
-
-            _client = new MongoClient(connectionString);
-        }
-
-        /// <summary>
         ///     Gets the collection.
         /// </summary>
         /// <returns></returns>
-        protected IMongoCollection<TModel> GetCollection()
+        protected DbSet<TModel> GetCollection()
         {
-            return _collection ?? (_collection = Database.GetCollection<TModel>(CollectionName));
+            return _collection ?? (_collection = Database.Set<TModel>());
         }
 
 
@@ -221,17 +182,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             return key;
         }
 
-        protected virtual async Task CreateIndex(string name, IndexKeysDefinition<TModel> keys)
-        {
-            var options = new CreateIndexOptions<TModel>
-            {
-                Name = name
-            };
-
-            var model = new CreateIndexModel<TModel>(keys, options);
-            await GetCollection().Indexes.CreateOneAsync(model);
-        }
-
         /// <summary>
         ///     Validates the object.
         /// </summary>
@@ -246,17 +196,22 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         protected virtual async Task<long> CountAsync(Expression<Func<TModel, bool>> filter)
         {
-            return await GetCollection().CountDocumentsAsync(filter);
+            return GetCollection().Where(filter).Count();
         }
 
-        protected async Task<List<TModel>> FindAsync(Expression<Func<TModel, bool>> filter)
+        protected async Task<List<TModel>> FindAsync(Expression<Func<TModel, bool>> filter, string includes = null)
         {
-            return await GetCollection().Find(filter).ToListAsync();
+            var query = GetCollection().AsQueryable();
+            if (!string.IsNullOrWhiteSpace(includes))
+            {
+                query = query.Include(includes);
+            }
+            return await query.Where(filter).ToListAsync();
         }
 
         protected async Task<TModel> FindOneAsync(Expression<Func<TModel, bool>> filter)
         {
-            return await GetCollection().Find(filter).FirstOrDefaultAsync();
+            return await GetCollection().FirstOrDefaultAsync(filter);
         }
     }
 }
