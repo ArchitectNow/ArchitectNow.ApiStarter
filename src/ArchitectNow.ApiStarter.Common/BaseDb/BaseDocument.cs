@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FluentValidation.Results;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
 using Newtonsoft.Json;
 
-namespace ArchitectNow.ApiStarter.Common.MongoDb
+namespace ArchitectNow.ApiStarter.Common.BaseDb
 {
     public abstract class BaseDocument
     {
@@ -14,7 +12,6 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
             IsActive = true;
         }
 
-        [BsonId(IdGenerator = typeof(CombGuidGenerator))]
         public Guid Id { get; set; }
 
         public bool IsActive { get; set; }
@@ -25,8 +22,8 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
 
         public Guid? OwnerUserId { get; set; }
 
-        [JsonIgnore] [BsonIgnore] public List<ValidationResult> ValidationErrors { get; set; }
+        [JsonIgnore] public List<ValidationResult> ValidationErrors { get; set; }
 
-        [BsonExtraElements] public Dictionary<string, object> ExtraElements { get; set; }
+         public Dictionary<string, object> ExtraElements { get; set; }
     }
 }

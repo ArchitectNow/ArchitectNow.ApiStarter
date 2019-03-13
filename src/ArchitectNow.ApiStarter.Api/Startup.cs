@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.AspNetCore.Rewrite;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -57,13 +58,17 @@ namespace ArchitectNow.ApiStarter.Api
 
             services.AddOptions();
 
+            services.AddDbContext<ApiStarterContext>(options =>
+            {
+                options.UseSqlServer(_configuration["sql:connectionString"]);
+            });
+
             services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
             if (_hostingEnvironment.IsDevelopment())
             {
                 services.AddHealthChecks()
-                    .AddMongoDb(_configuration["mongo:connectionString"], _configuration["mongo:databaseName"],
-                        "MongoDb")
+                    .AddDbContextCheck<ApiStarterContext>()
                     .AddCheck("Custom", () => { return HealthCheckResult.Healthy(); });
 
                 services.AddHealthChecksUI();

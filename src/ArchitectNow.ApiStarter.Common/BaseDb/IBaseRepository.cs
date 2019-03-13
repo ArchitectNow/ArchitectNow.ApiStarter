@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace ArchitectNow.ApiStarter.Common.MongoDb
+namespace ArchitectNow.ApiStarter.Common.BaseDb
 {
     public interface IBaseRepository<T> : IBaseRepository
         where T : BaseDocument
@@ -18,6 +18,5 @@ namespace ArchitectNow.ApiStarter.Common.MongoDb
     public interface IBaseRepository
     {
         string CollectionName { get; }
-        Task ConfigureIndexes();
     }
 }

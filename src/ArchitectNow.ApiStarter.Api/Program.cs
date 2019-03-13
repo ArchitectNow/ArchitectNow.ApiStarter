@@ -2,9 +2,11 @@
 using System.IO;
 using System.Threading.Tasks;
 using ArchitectNow.ApiStarter.Api.Configuration;
+using ArchitectNow.ApiStarter.Common;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace ArchitectNow.ApiStarter.Api
@@ -29,6 +31,13 @@ namespace ArchitectNow.ApiStarter.Api
 
                 Log.Logger = _configuration.ConfigureLogging().CreateLogger();
                 var host = BuildWebHost(args);
+
+                using (var scope = host.Services.CreateScope())
+                {
+                    var context = scope.ServiceProvider.GetService<ApiStarterContext>();
+                    context.Database.EnsureCreated();
+//                    ApiStarterInitializer.Initialize(context);
+                }
 
                 //initialization
                 await host.RunAsync();
