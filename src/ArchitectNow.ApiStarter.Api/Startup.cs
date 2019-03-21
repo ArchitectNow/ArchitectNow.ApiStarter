@@ -31,6 +31,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using NSwag;
+using NSwag.SwaggerGeneration.Processors.Security;
 using Serilog;
 using Serilog.Context;
 
@@ -63,7 +64,7 @@ namespace ArchitectNow.ApiStarter.Api
                 options.UseSqlServer(_configuration["sql:connectionString"]);
             });
 
-            services.ConfigureJwt(_configuration, ConfigureSecurityKey);
+            // services.ConfigureJwt(_configuration, ConfigureSecurityKey);
 
             if (_hostingEnvironment.IsDevelopment())
             {
@@ -260,8 +261,19 @@ namespace ArchitectNow.ApiStarter.Api
                 settings.Version = Assembly.GetEntryAssembly().GetName().Version.ToString();
                 settings.DocumentName = documentName;
                 settings.ApiGroupNames = new[] {groupName};
+                
+                // Add an authenticate button to Swagger for JWT tokens
+                settings.OperationProcessors.Add(new OperationSecurityScopeProcessor("JWT"));
+                settings.DocumentProcessors.Add(new SecurityDefinitionAppender("JWT", new SwaggerSecurityScheme
+                {
+                    Type = SwaggerSecuritySchemeType.ApiKey,
+                    Name = "securityToken",
+                    In = SwaggerSecurityApiKeyLocation.Header,
+                    Description = "Type into the textbox: Bearer {your JWT token}. You can get a JWT token from /Authorization/Authenticate."
+                }));                
             });
         }
+
 
         private string ExtractHost(HttpRequest request)
         {
