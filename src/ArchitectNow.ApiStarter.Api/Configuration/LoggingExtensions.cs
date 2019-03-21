@@ -21,6 +21,7 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                                            .WriteTo
                                            .RollingFile($@"{logPath}\{{Date}}.txt", retainedFileCountLimit: 10,
                                                shared: true)
+                                           .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                                            .WriteTo
                                            .Console(theme: AnsiConsoleTheme.Code);
 
