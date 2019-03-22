@@ -91,12 +91,8 @@ namespace ArchitectNow.ApiStarter.Api
             });
 
 
-            if (!_hostingEnvironment.IsDevelopment())
-            {
-                var key = _configuration["ApplicationInsights:InstrumentationKey"];
-
-                if (!string.IsNullOrEmpty(key)) services.AddApplicationInsightsTelemetry(key);
-            }
+            var key = _configuration["ApplicationInsights:InstrumentationKey"];
+            if (!string.IsNullOrEmpty(key)) services.AddApplicationInsightsTelemetry(key);
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
             services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
