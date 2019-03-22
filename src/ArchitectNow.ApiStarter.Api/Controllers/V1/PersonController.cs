@@ -9,6 +9,7 @@ using ArchitectNow.ApiStarter.Common.Models.Exceptions;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Repositories;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
 
@@ -45,6 +46,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         /// <param name="searchParams">Search parameters</param>
         /// <returns></returns>
         [HttpGet]
+        [AllowAnonymous]
         [SwaggerResponse(HttpStatusCode.OK, typeof(List<PersonVm>))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
         public async Task<IActionResult> Search([FromQuery] string searchParams = "")
