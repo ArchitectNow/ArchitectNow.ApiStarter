@@ -13,8 +13,10 @@ using ArchitectNow.ApiStarter.Common.Models.Options;
 using ArchitectNow.ApiStarter.Common.Models.ViewModels;
 using ArchitectNow.ApiStarter.Common.Services;
 using AutoMapper;
+using Microsoft.ApplicationInsights;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NSwag.Annotations;
 
@@ -25,13 +27,16 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
     {
         private readonly JwtIssuerOptions _jwtOptions;
         private readonly ISecurityService _securityService;
+        private readonly TelemetryClient _telemetryClient;
 
         public SecurityController(ISecurityService securityService,
             IMapper mapper,
             IServiceInvoker serviceInvoker,
-            IOptions<JwtIssuerOptions> jwtOptions) : base(mapper, serviceInvoker)
+            IOptions<JwtIssuerOptions> jwtOptions,
+            TelemetryClient telemetryClient) : base(mapper, serviceInvoker)
         {
             _securityService = securityService;
+            _telemetryClient = telemetryClient;
             _jwtOptions = jwtOptions.Value;
         }
 
@@ -61,7 +66,16 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 
                     return result;
                 }
-
+                else
+                {
+                    var eventParameters = new Dictionary<string, string>()
+                    {
+                        { "email", parameters.Email },
+                        { "sourceAddress", Request.HttpContext.Connection.RemoteIpAddress.ToString() }
+                    };
+                    this._telemetryClient.TrackEvent("Failed Login", eventParameters);
+                }
+                
                 throw new ApiException<string>("Invalid Credentials");
             });
         }

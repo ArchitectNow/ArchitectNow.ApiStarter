@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -94,5 +95,13 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
                 return Mapper.Map<PersonVm>(existingItem);
             });
         }
+
+        [HttpPost]
+        [SwaggerResponse(HttpStatusCode.OK, typeof(void))]
+        public async Task ThrowError()
+        {
+            throw new ApplicationException("Things went wrong!");
+        }
+        
     }
 }

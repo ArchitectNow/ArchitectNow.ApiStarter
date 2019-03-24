@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
@@ -23,7 +24,9 @@ namespace ArchitectNow.ApiStarter.Api.Configuration
                                                shared: true)
                                            .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                                            .WriteTo
-                                           .Console(theme: AnsiConsoleTheme.Code);
+                                           .Console(theme: AnsiConsoleTheme.Code)
+                                           .WriteTo
+                                           .ApplicationInsights(TelemetryConfiguration.Active, TelemetryConverter.Traces);
 
             Log.Write(LogEventLevel.Information, "Logging has started");
 
