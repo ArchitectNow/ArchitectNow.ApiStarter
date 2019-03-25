@@ -13,6 +13,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NSwag.Annotations;
+using Serilog;
 
 namespace ArchitectNow.ApiStarter.Api.Controllers.V1
 {
@@ -20,13 +21,16 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
     public class PersonController : ApiV1BaseController
     {
         private readonly IPersonRepository _personRepository;
+        private readonly ILogger _logger;
 
         public PersonController(
             IMapper mapper,
             IServiceInvoker serviceInvoker,
-            IPersonRepository personRepository) : base(mapper, serviceInvoker)
+            IPersonRepository personRepository,
+            ILogger logger) : base(mapper, serviceInvoker)
         {
             _personRepository = personRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -54,6 +58,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         {
             return await ServiceInvoker.AsyncOk(async () =>
             {
+                _logger.Information("Executing a query with search parameters {searchParams}", searchParams);
                 var people = await _personRepository.Search(searchParams);
 
                 return people.Select(x => Mapper.Map<PersonVm>(x));
@@ -96,6 +101,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
             });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse(HttpStatusCode.OK, typeof(void))]
         public async Task ThrowError()
