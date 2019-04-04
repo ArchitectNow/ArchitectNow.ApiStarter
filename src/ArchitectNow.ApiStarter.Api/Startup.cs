@@ -92,7 +92,10 @@ namespace ArchitectNow.ApiStarter.Api
 
 
             var key = _configuration["ApplicationInsights:InstrumentationKey"];
-            if (!string.IsNullOrEmpty(key)) services.AddApplicationInsightsTelemetry(key);
+            if (!string.IsNullOrEmpty(key))
+            {
+                services.AddApplicationInsightsTelemetry(key);
+            }
 
             services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Fastest);
             services.AddResponseCompression(options => { options.Providers.Add<GzipCompressionProvider>(); });
