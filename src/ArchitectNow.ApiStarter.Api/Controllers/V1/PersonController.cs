@@ -34,7 +34,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         [HttpGet]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserInformation))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
-        public async Task<IActionResult> SecurityTest()
+        public async Task<IActionResult> SecurityTest([FromQuery]string MyData)
         {
             return await ServiceInvoker.AsyncOk(() => Task.FromResult(HttpContext.User.GetUserInformation()));
         }

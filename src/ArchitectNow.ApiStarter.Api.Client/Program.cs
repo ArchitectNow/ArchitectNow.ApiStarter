@@ -20,6 +20,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
             {
                 var loginParams = new LoginVm();
 
+               
                 loginParams.Email = "kvgros@architectnow.net";
                 loginParams.Password = "testtest";
 
@@ -38,6 +39,7 @@ namespace ArchitectNow.ApiStarter.Api.Client
             if (!string.IsNullOrEmpty(token))
             {
                 var personClient = new PersonClient();
+               
 
                 personClient.Token = token;
 
