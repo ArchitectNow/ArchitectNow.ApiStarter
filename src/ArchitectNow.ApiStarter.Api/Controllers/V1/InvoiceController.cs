@@ -28,7 +28,7 @@ namespace ArchitectNow.ApiStarter.Api.Controllers.V1
         [HttpGet()]
         [SwaggerResponse(HttpStatusCode.OK, typeof(UserVm))]
         [SwaggerResponse(HttpStatusCode.BadRequest, typeof(ApiError))]
-        public async Task<UserVm> DoWork()
+        public Task<UserVm> DoWork()
         {
             return null;
         }
