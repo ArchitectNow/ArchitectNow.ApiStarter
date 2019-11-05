@@ -14,6 +14,8 @@ namespace ArchitectNow.ApiStarter.Api.Services
         public ServiceInvoker(IExceptionResultBuilder exceptionResultBuilder)
         {
             _exceptionResultBuilder = exceptionResultBuilder;
+
+            
         }
 
         public virtual async Task<IActionResult> AsyncOk<TResult>(Func<Task<TResult>> serviceCall)

@@ -10,6 +10,8 @@ namespace ArchitectNow.ApiStarter.Api.Models.Validation
             RuleFor(vm => vm.Email).NotEmpty().EmailAddress();
             RuleFor(vm => vm.NameFirst).MinimumLength(3);
             RuleFor(vm => vm.NameLast).MinimumLength(3);
+
+            //test change
         }
     }
 }
